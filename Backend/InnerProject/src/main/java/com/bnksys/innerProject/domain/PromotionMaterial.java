@@ -13,24 +13,18 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class User {
-	//유저번호
+public class PromotionMaterial {
+	//저작물 번호
 	@Id
-	@Column(name="user_no")
 	@GeneratedValue
+	private long pmNo;
+	
+	//유저 번호
+	@Column(nullable = false)
 	private long userNo;
 	
-	//유저 아이디
+	//제목
 	@Column(length = 100, nullable = false)
-	private String userId;
+	private String pmTitle;
 	
-	//유저 비밀번호
-	@Column(length = 100, nullable = false)
-	private String userPassword;
-	
-	
-	//유저 이름
-	@Column(length = 50, nullable = false)
-	private String userName;
-		
 }

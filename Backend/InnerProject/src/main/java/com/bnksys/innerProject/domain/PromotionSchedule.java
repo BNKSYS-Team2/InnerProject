@@ -1,5 +1,7 @@
 package com.bnksys.innerProject.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,24 +15,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class User {
-	//유저번호
+public class PromotionSchedule {
+	//스케줄 번호
 	@Id
-	@Column(name="user_no")
 	@GeneratedValue
-	private long userNo;
+	private long psNo;
 	
-	//유저 아이디
+	//시작시간
+	@Column(nullable = false)
+	private LocalDateTime startDt;
+	
+	//종료시간
 	@Column(length = 100, nullable = false)
-	private String userId;
+	private LocalDateTime endDt;
 	
-	//유저 비밀번호
-	@Column(length = 100, nullable = false)
-	private String userPassword;
+	//저작물번호
+	@Column(nullable = false)
+	private long pmNo;
 	
-	
-	//유저 이름
-	@Column(length = 50, nullable = false)
-	private String userName;
-		
 }
