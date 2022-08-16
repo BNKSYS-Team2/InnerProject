@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +67,23 @@ public class UserController {
 	}
 
 	
+	//회원 탈퇴
+	@DeleteMapping("/delete")
+	public Map<String, Object> deleteMember(@RequestBody Map<String, String> req){
+		Map<String, Object> ret = new HashMap<>();
 
+		User user=new User();
+		user.setUserId((String) req.get("id"));
+		
+		try {
+			userService.deleteUser(user);			
+		}catch(IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		ret.put("success", "True");
+		return ret;
+	}
 	
 }
