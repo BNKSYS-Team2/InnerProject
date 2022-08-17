@@ -73,7 +73,7 @@ public class UserController {
 		Map<String, Object> ret = new HashMap<>();
 
 		User user=new User();
-		user.setUserId((String) req.get("id"));
+		user.setUserNo(Long.parseLong(req.get("userNo")));
 		
 		try {
 			userService.deleteUser(user);			

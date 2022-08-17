@@ -62,10 +62,10 @@ public class UserServiceImpl implements UserService {
 	//회원탈퇴
 	@Override
 	public void deleteUser(User user) {
-		if(userRepository.findByUserId(user.getUserId()).isPresent() == false)
+		if(userRepository.findById(user.getUserNo()).isPresent() == false)
 			throw new IllegalStateException("존재하지 않는 아이디 입니다");
 		
-		userRepository.deleteById(userRepository.findByUserId(user.getUserId()).get().getUserNo());
+		userRepository.deleteById(user.getUserNo());
 		
 		return;
 		

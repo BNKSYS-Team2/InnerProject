@@ -12,8 +12,15 @@ spring:
       hibernate:
  #      show_sql: true
  #      format_sql: true
+  servlet:
+    multipart:
+      maxFileSize: 5MB
+      maxRequestSize: 5MB
         
 logging.level:
   org.hibernate.SQL: debug
   
 
+file:
+  upload:
+    location: /BNKSYS/serverFileStore
