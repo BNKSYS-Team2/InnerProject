@@ -27,4 +27,8 @@ public class PromotionMaterial {
 	@Column(length = 100, nullable = false)
 	private String pmTitle;
 	
+	//파일 확장자명
+	@Column(length = 100, nullable = false)
+	private String fileExtension;
+	
 }

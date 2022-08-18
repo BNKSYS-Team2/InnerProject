@@ -75,10 +75,10 @@ public class FileServiceImpl implements FileService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new FileNotFoundException("Could not find file");
+				throw new FileNotFoundException("파일을 찾을 수 없습니다");
 			}
 		} catch (MalformedURLException e) {
-			throw new FileNotFoundException("Could not download file");
+			throw new FileNotFoundException("파일을 다운받을 수 없습니다");
 		}
 
 	}

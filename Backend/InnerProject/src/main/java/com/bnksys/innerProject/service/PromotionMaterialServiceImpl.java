@@ -30,7 +30,10 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 	@Override
 	public PromotionMaterial load(PromotionMaterial pm) {
 		
-		return null;
+		if(pmRepository.findById(pm.getPmNo()).isPresent() == false)
+			throw new IllegalStateException("존재하지 않는 저작물 입니다");
+		
+		return pmRepository.findById(pm.getPmNo()).get();
 	}
 
 	@Override
