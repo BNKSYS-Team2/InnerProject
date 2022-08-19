@@ -1,0 +1,117 @@
+.distributeWrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.distribute {
+  z-index: -99999;
+  margin-bottom: 40px;
+  // 은행, 지점 선택
+  .placeSelect {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    .form-select {
+      width: 200px;
+      margin: 0 10px;
+    }
+  }
+
+  // 기기 해상도 체크 영역
+  .checkboxWrap {
+    background-color: #eee;
+    width: 500px;
+    height: 80px;
+    font-size: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+
+    .checkDevice {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      margin: 0 30px;
+    }
+    input[type='checkbox'] {
+      display: none;
+    }
+    input[type='checkbox'] + label {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #707070;
+      position: relative;
+      margin-right: 7px;
+      margin-top: -1.5px;
+    }
+    input[id='check1']:checked + label::after {
+      content: '✔';
+      color: #ef2835;
+      font-size: 20px;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      position: absolute;
+      left: -8px;
+      top: -6px;
+    }
+    input[id='check2']:checked + label::after {
+      content: '✔';
+      color: #ef2835;
+      font-size: 20px;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      position: absolute;
+      left: -8px;
+      top: -6px;
+    }
+  }
+
+  // 선택한 기기 표시창
+  .deviceResult {
+    background-color: #eee;
+    width: 500px;
+    height: 120px;
+    font-size: 20px;
+    border-radius: 8px;
+    margin-bottom: 70px;
+  }
+
+  // 저작물 선택
+  .selectPM {
+    margin-bottom: 50px;
+    .pmArea {
+      margin: 0 40px;
+      .device {
+        font-weight: bold;
+      }
+      .pmImg {
+        //   background-color: #bbb;
+        //   width: 300px;
+        //   height: 300px;
+        margin-bottom: 20px;
+        img {
+          border-radius: 10px;
+          width: 300px;
+          height: 300px;
+        }
+      }
+      .selBtn {
+        border-radius: 5px;
+        border: 1px solid #333;
+        background-color: #ddd;
+        width: 100px;
+        height: 35px;
+        &:hover {
+          background-color: #ccc;
+        }
+      }
+    }
+  }
+}
