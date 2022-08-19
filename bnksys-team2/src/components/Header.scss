@@ -1,14 +1,21 @@
 .navbar {
   background-color: #ef2835;
+  height: 70px;
+  margin-bottom: 50px;
   a {
-    color: #fff;
+    // color: #fff;
     font-weight: bold;
     font-size: 18px;
+    text-decoration: none;
+    &:hover {
+      color: #ddd;
+    }
   }
   .navbar-brand {
-    margin-right: 350px;
+    margin-right: 330px;
   }
   .nav-link {
-    margin: 0 30px;
+    margin: 0 40px;
+    background-color: #ef2835;
   }
 }
