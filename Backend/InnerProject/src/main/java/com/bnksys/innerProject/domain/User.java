@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +15,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
+@DynamicInsert
 @ToString
 public class User {
 	//유저번호
@@ -32,5 +36,8 @@ public class User {
 	//유저 이름
 	@Column(length = 50, nullable = false)
 	private String userName;
-		
+	
+	//권한 1:계원, 2:책임자
+	@ColumnDefault(value = "1")
+	private Long authority;
 }
