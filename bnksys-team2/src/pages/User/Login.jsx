@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+// import { Form, Button } from 'react-bootstrap';
+import { Container, Col, Row, Form, Button, Modal, NavLink } from 'react-bootstrap';
 
 import * as Api from '../../api';
  
@@ -61,6 +62,9 @@ function Login() {
           <br></br>
           <br></br>
             <h2>Login</h2>
+            <Row className="justify-content-md-center mt-5">
+              <Col lg={8}>
+
             <Form onSubmit={handleSubmit}>
               <Form.Group>
               <Form.Label>아이디</Form.Label>
@@ -106,7 +110,11 @@ function Login() {
             </Form.Group>
 
             </Form>
+            </Col>
+        </Row>
+
         </div>
+        
         
     );
 }
