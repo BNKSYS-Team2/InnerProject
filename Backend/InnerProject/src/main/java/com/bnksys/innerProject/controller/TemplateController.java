@@ -15,31 +15,28 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bnksys.innerProject.domain.PromotionMaterial;
+import com.bnksys.innerProject.domain.Template;
 import com.bnksys.innerProject.domain.UseType;
-import com.bnksys.innerProject.dto.PromotionMaterialDto;
 import com.bnksys.innerProject.service.FileService;
-import com.bnksys.innerProject.service.PromotionMaterialService;
+import com.bnksys.innerProject.service.TemplateService;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RestController
-@RequestMapping("/api/pm")
-public class PromotionMaterialController {
-	
+@RequestMapping("/api/template")
+public class TemplateController {
+
 	@Autowired
-	private PromotionMaterialService pmService;
+	private TemplateService templateService;
 	
 	@Autowired
 	private FileService fileService;
@@ -47,24 +44,32 @@ public class PromotionMaterialController {
 	
 	@PostMapping("/save")
 	public Map<String, Object> save(
-			@RequestParam(value = "pm") MultipartFile pmFile, 
-			@RequestParam(value = "userNo") long userNo, 
-			@RequestParam(value = "title", required = false, defaultValue = "untitle") String title,
-			@RequestParam(value = "utNo") Long utNo // 용도타입 번호 
+			@RequestParam(value = "template") MultipartFile tmpFile, 
+			@RequestParam(value = "utNo") Long utNo, // 용도타입 번호 
+			@RequestParam(value = "title", required = false, defaultValue = "untitle") String title,	//제목
+			@RequestParam(value = "tag1", required = false) String tag1, // 태그1
+			@RequestParam(value = "tag2", required = false) String tag2, // 태그2
+			@RequestParam(value = "tag3", required = false) String tag3, // 태그3
+			@RequestParam(value = "tag4", required = false) String tag4, // 태그4
+			@RequestParam(value = "tag5", required = false) String tag5  // 태그5
 			) {
 		Map<String, Object> ret = new HashMap<>();
 		
-		PromotionMaterial pm = new PromotionMaterial();
-		pm.setPmTitle(title);
-		pm.setUserNo(userNo);
-		pm.setUtNo(new UseType(utNo));
-		pm.setFileExtension(pmFile.getOriginalFilename().split("\\.")[1]);
-		Long pmNo = null;
+		Template tmp = new Template();
+		tmp.setTitle(title);
+		tmp.setTag1(tag1);
+		tmp.setTag2(tag2);
+		tmp.setTag3(tag3);
+		tmp.setTag4(tag4);
+		tmp.setTag5(tag5);
+		tmp.setUtNo(new UseType(utNo));
+		
+		Long tmpNo = null;
 		
 		
 		// 데이터베이스에 저장
 		try {
-			pmNo = pmService.save(pm);
+			tmpNo = templateService.save(tmp);
 		} catch (IllegalStateException e) {
 			ret.put("success", "False");
 			ret.put("msg", e.getMessage());
@@ -74,10 +79,10 @@ public class PromotionMaterialController {
 		
 		// 파일 저장
 		try {
-			fileService.saveFile(pmFile, pmNo);
+			fileService.saveFile(tmpFile, tmpNo);
 		} catch (IllegalStateException e) {
 			try {
-				pmService.delete(pm);
+				templateService.delete(tmp);
 			} catch (IllegalStateException e2) {
 				ret.put("success", "False");
 				ret.put("msg", e2.getMessage());
@@ -93,36 +98,27 @@ public class PromotionMaterialController {
 		return ret;
 	}
 	
-	
-	@GetMapping("/load/{userNo}/{pmNo}")
+	@GetMapping("/load/{temNo}")
 	public  ResponseEntity<?> load(
-			@PathVariable(name = "userNo") Long userNo,
-			@PathVariable(name = "pmNo") Long pmNo,
+			@PathVariable(name = "temNo") Long temNo,
 			HttpServletRequest request
 			) {
 		Map<String, Object> ret = new HashMap<>();
 		Resource resource = null;
 
-		PromotionMaterial pm = new PromotionMaterial();
-		pm.setPmNo(pmNo);
+		Template tmp = new Template();
+		tmp.setTemNo(temNo);
 		String fileName = null;
 		
 		try {
-			pm = pmService.load(pm);
+			tmp = templateService.load(tmp);
 		} catch (IllegalStateException e) {
 			ret.put("success", "False");
 			ret.put("msg", e.getMessage());
 			return new ResponseEntity<>(ret, HttpStatus.OK);
 		}
 		
-		fileName = pm.getPmNo() + "." +pm.getFileExtension();
-		
-		if(pm.getUserNo() != userNo) {
-			ret.put("success", "False");
-			ret.put("msg", "해당 유저의 저작물이 아닙니다");
-			return new ResponseEntity<>(ret, HttpStatus.OK);
-		}
-			
+		fileName = tmp.getTemNo() + ".svg" ;			
 		
 		try {
 			resource = fileService.loadFile(fileName);
@@ -150,18 +146,43 @@ public class PromotionMaterialController {
 
 	
 	
-	@GetMapping("/list/{userNo}")
+	@GetMapping("/searchList/{searchValue}")
+	public  Map<String, Object> loadListSearch(
+			@PathVariable(name = "searchValue") String searchVal,
+			HttpServletRequest request
+			) {
+		Map<String, Object> ret = new HashMap<>();
+
+		List<Template> tmp = new ArrayList<>();
+		
+		
+		try {
+			tmp = templateService.loadListSearch(searchVal);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		
+		ret.put("temList", tmp);
+		ret.put("temCount", tmp.size());
+		
+		
+		return ret;
+	}
+	
+	@GetMapping("/allList")
 	public  Map<String, Object> loadList(
-			@PathVariable(name = "userNo") Long userNo,
 			HttpServletRequest request
 			) {
 		Map<String, Object> ret = new HashMap<>();
 
-		List<PromotionMaterialDto> pm = new ArrayList<>();
+		List<Template> tmp = new ArrayList<>();
 		
 		
 		try {
-			pm = pmService.loadList(userNo);
+			tmp = templateService.loadList();
 		} catch (IllegalStateException e) {
 			ret.put("success", "False");
 			ret.put("msg", e.getMessage());
@@ -169,89 +190,11 @@ public class PromotionMaterialController {
 		}	
 	
 		
-		ret.put("pmList", pm);
-		ret.put("pmCount", pm.size());
+		ret.put("temList", tmp);
+		ret.put("temCount", tmp.size());
 		
 		
 		return ret;
 	}
 	
-	@GetMapping("/list/{userNo}/{utNo}")
-	public  Map<String, Object> loadListUtNo(
-			@PathVariable(name = "userNo") Long userNo,
-			@PathVariable(name = "utNo") Long utNo,			
-			HttpServletRequest request
-			) {
-		Map<String, Object> ret = new HashMap<>();
-
-		List<PromotionMaterialDto> pm = new ArrayList<>();
-		
-		try {
-			pm = pmService.loadListUseTypeNo(userNo,utNo);
-		} catch (IllegalStateException e) {
-			ret.put("success", "False");
-			ret.put("msg", e.getMessage());
-			return ret;
-		}	
-	
-		
-		ret.put("pmList", pm);
-		ret.put("pmCount", pm.size());
-		
-		
-		return ret;
-	}
-	
-	
-	@DeleteMapping("/delete")
-	public  Map<String, Object> delete(@RequestBody Map<String, String> req) {
-		Map<String, Object> ret = new HashMap<>();
-		PromotionMaterial pm = new PromotionMaterial();
-		Long userNo = null;
-		
-		if(req.containsKey("pmNo") == false) {
-			ret.put("success", "False");
-			ret.put("msg", "저작물을 지정 해 주세요");
-			return ret;
-		}
-		
-		if(req.containsKey("userNo") == false) {
-			ret.put("success", "False");
-			ret.put("msg", "로그인정보가 없습니다");
-			return ret;
-		}
-			
-		pm.setPmNo(Long.parseLong((String)req.get("pmNo")));		
-		userNo = Long.parseLong((String)req.get("userNo"));
-		
-		
-		try {
-			pm = pmService.load(pm);
-		} catch (IllegalStateException e) {
-			ret.put("success", "False");
-			ret.put("msg", e.getMessage());
-			return ret;
-		}
-		
-		if(pm.getUserNo() != userNo) {
-			ret.put("success", "False");
-			ret.put("msg", "해당 유저의 저작물이 아닙니다.");
-			return ret;
-		}
-		
-		
-		
-		try {
-			pmService.delete(pm);
-		} catch (IllegalStateException e) {
-			ret.put("success", "False");
-			ret.put("msg", e.getMessage());
-			return ret;
-		}
-		
-		ret.put("success", "True");
-		
-		return ret;
-	}
-
 }

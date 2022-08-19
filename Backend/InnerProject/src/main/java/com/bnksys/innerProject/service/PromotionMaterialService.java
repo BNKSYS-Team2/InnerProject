@@ -19,4 +19,6 @@ public interface PromotionMaterialService {
 	//작업물 리스트 조회
 	List<PromotionMaterialDto> loadList(long userNo);
 	
+	//용도타입일치하는 작업물 리스트 조회
+	List<PromotionMaterialDto> loadListUseTypeNo(long userNo, long utNo);
 }

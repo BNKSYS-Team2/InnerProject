@@ -1,0 +1,2 @@
+INSERT INTO `bnkinner`.`use_type` (`ut_no`, `height`, `ut_name`, `width`) VALUES ('1', '1080', 'FHD가로', '1920');
+INSERT INTO `bnkinner`.`use_type` (`ut_no`, `height`, `ut_name`, `width`) VALUES ('2', '1920', 'FHD세로', '1080');

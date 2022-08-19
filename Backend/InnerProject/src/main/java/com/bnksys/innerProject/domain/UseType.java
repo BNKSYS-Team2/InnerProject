@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class UseType {
 	//용도타입번호
 	@Id
@@ -31,4 +33,8 @@ public class UseType {
 	//높이
 	@Column(nullable = false)
 	private long height;
+	
+	public UseType(long utNo) {
+		this.utNo=utNo;
+	}
 }

@@ -1,5 +1,7 @@
 package com.bnksys.innerProject.dto;
 
+import com.bnksys.innerProject.domain.UseType;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,7 @@ public class PromotionMaterialDto {
 	
 	//제목
 	private String pmTitle;
+	
+	//용도타입
+	private UseType utNo;
 }

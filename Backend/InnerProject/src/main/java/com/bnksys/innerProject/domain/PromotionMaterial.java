@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,4 +33,8 @@ public class PromotionMaterial {
 	@Column(length = 100, nullable = false)
 	private String fileExtension;
 	
+	//용도타입
+	@ManyToOne
+	@JoinColumn(name="UT_NO")
+	private UseType utNo;
 }
