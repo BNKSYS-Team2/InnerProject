@@ -1,9 +1,13 @@
 package com.bnksys.innerProject.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bnksys.innerProject.domain.PromotionMaterial;
+import com.bnksys.innerProject.dto.PromotionMaterialDto;
 import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.UserRepository;
 
@@ -45,5 +49,15 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 		
 		return true;
 	}
+
+	@Override
+	public List<PromotionMaterialDto> loadList(long userNo) {
+		if(userRepository.findById(userNo).isPresent() == false)
+			throw new IllegalStateException("존재하지 않는 아이디 입니다");
+		
+		//List<PromotionMaterial> -> List<PromotionMaterialDto> 형변환 후 리턴
+		return pmRepository.findByUserNo(userNo).get().stream().map(pm->new PromotionMaterialDto(pm.getPmNo(),pm.getPmTitle())).collect(Collectors.toList());
+	}
+
 
 }
