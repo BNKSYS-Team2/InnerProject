@@ -50,7 +50,8 @@ public class UserServiceImpl implements UserService {
 		
 		if(userRepository.findByUserId(user.getUserId()).isPresent() == false)
 			throw new IllegalStateException("존재하지 않는 아이디 입니다");
-		
+		if(user.getUserPassword() == null || user.getUserPassword().length() == 0)
+			throw new IllegalStateException("비밀번호가 입력되지 않았습니다");
 		User selectedUser = userRepository.findByUserId(user.getUserId()).get();
 		if(selectedUser.getUserPassword().compareTo(user.getUserPassword()) != 0)
 			throw new IllegalStateException("비밀번호가 일치하지 않습니다");

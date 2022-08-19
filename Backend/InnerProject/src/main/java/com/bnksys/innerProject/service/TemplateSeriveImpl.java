@@ -23,8 +23,9 @@ public class TemplateSeriveImpl implements TemplateService {
 	
 	@Override
 	public long save(Template tmp) {
-		log.info("--추헌국 "+ tmp.getUtNo().getUtNo());
 		tmp.setUtNo(useTypeRepository.findById(tmp.getUtNo().getUtNo()).orElseThrow(()->new IllegalStateException("존재하지 않는 용도타입 입니다")));
+		
+		// 원래는 템플릿 저장할떄 존재하는 태그인지 확인 후  insert해야 하지만 탬플릿 저장기능 프론트에서 안만드니까 태그검증 생략함
 		
 		templateRepository.save(tmp);
 		
