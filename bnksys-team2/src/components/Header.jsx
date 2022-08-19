@@ -24,11 +24,20 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#">저작물 생성</Nav.Link>
-            <Nav.Link href="#">저작물 배포</Nav.Link>
-            <Nav.Link href="#">내 저작물</Nav.Link>
+            <Link to="/" className="nav-link" style={{ color: 'white' }}>
+              저작물 생성
+            </Link>
+            <Link to="/" className="nav-link" style={{ color: 'white' }}>
+              저작물 배포
+            </Link>
+            {/* <Nav.Link href="/mypm">내 저작물</Nav.Link> */}
+            <Link to="/mypm" className="nav-link" style={{ color: 'white' }}>
+              내 저작물
+            </Link>
           </Nav>
-          <Nav.Link href="#">로그아웃</Nav.Link>
+          <Nav.Link href="#" style={{ color: 'white' }}>
+            로그아웃
+          </Nav.Link>
         </Navbar.Collapse>
       </Container>
     </Navbar>
