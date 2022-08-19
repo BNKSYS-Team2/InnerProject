@@ -1,0 +1,39 @@
+.myPMListModal {
+  width: 80%;
+  height: 520px;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 99999;
+  border-radius: 10px;
+
+  .explain {
+    margin-top: 20px;
+    font-weight: bolder;
+    font-size: 20px;
+  }
+
+  .myPMSel {
+    padding: 20px;
+    margin-bottom: 40px;
+    li {
+      list-style: none;
+    }
+    .myPM {
+      width: 300px;
+      height: 300px;
+      margin: 0 30px;
+      .pmImg {
+        background-color: antiquewhite;
+        width: 300px;
+        height: 300px;
+        margin-bottom: 10px;
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
