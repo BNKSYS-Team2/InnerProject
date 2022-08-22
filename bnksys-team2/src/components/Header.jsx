@@ -4,25 +4,22 @@ import { Link } from 'react-router-dom';
 
 import './Header.scss';
 
+import * as Api from '../api';
+
 const Header = () => {
 
   const [isLogin, setIsLogin] = useState(false);
 
-  const s = sessionStorage.getItem('userNo');
-
   useEffect(() => {
     if(sessionStorage.getItem('userNo') === null || sessionStorage.getItem('userNo') === 'undefined'){
     // sessionStorage 에 userNo 라는 key 값으로 저장된 값이 없다면
-      console.log('f');
       setIsLogin(false);
     } else {
     // sessionStorage 에 userNo 라는 key 값으로 저장된 값이 있다면
     // 로그인 상태 변경
-      console.log('t');
       setIsLogin(true);
-      // console.log('isLogin ?? :: ', isLogin);
     }
-  },[s]);
+  });
 
   const onLogout = () => {
     // sessionStorage 에 user_id 로 저장되어있는 아이템을 삭제한다.
@@ -30,6 +27,24 @@ const Header = () => {
       // App 으로 이동(새로고침)
       document.location.href = '/';
   };
+
+  const deleteUser = async () => {
+    const userNo = sessionStorage.getItem('userNo');
+      if (window.confirm('정말로 탈퇴하시겠습니까?')) {
+        const res = await Api.post('api/user/delete',{
+          userNo
+        }).then(res => {
+          sessionStorage.clear();
+          alert('탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
+          window.location.href='/';
+        }).catch ((error)  =>{
+          alert('탈퇴에 실패하였습니다. 다시 시도해주세요.', error);
+        }
+        );
+      }
+};
+
+
 
   return (
     // <Navbar collapseOnSelect expand="lg">
@@ -57,6 +72,7 @@ const Header = () => {
             <Nav.Link href="#">내 저작물</Nav.Link>
           </Nav>
           <Nav.Link href="/" onClick={onLogout}>로그아웃</Nav.Link>
+          <Nav.Link href="#" onClick={deleteUser}>회원 탈퇴</Nav.Link>
           </>) : null }
           
         </Navbar.Collapse>
