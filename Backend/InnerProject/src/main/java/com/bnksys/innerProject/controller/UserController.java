@@ -70,7 +70,7 @@ public class UserController {
 
 	
 	//회원 탈퇴
-	@DeleteMapping("/delete")
+	@PostMapping("/delete")
 	public Map<String, Object> deleteMember(@RequestBody Map<String, String> req){
 		Map<String, Object> ret = new HashMap<>();
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bnksys.innerProject.domain.ClientInfo;
 import com.bnksys.innerProject.dto.ClientUnitDto;
 import com.bnksys.innerProject.repository.ClientInfoRepository;
 
@@ -34,6 +35,12 @@ public class ClientInfoServiceImpl implements ClientInfoService {
 	@Override
 	public List<ClientUnitDto> unit(String company, String location) {
 		return clientInfoRepository.findUnit(company, location).orElse(new ArrayList<>()).stream().map((c)->new ClientUnitDto(c.getClientNo(), c.getUnit(), c.getUtNo())).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean save(ClientInfo ci) {
+		clientInfoRepository.save(ci);
+		return true;
 	}
 
 }

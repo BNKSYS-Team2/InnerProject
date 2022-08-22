@@ -205,7 +205,7 @@ public class PromotionMaterialController {
 	}
 	
 	
-	@DeleteMapping("/delete")
+	@PostMapping("/delete")
 	public  Map<String, Object> delete(@RequestBody Map<String, String> req) {
 		Map<String, Object> ret = new HashMap<>();
 		PromotionMaterial pm = new PromotionMaterial();

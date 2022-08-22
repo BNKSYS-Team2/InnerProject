@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bnksys.innerProject.domain.ClientInfo;
 import com.bnksys.innerProject.dto.ClientUnitDto;
 import com.bnksys.innerProject.service.ClientInfoService;
 
@@ -98,6 +101,31 @@ public class ClientInfoController {
 		
 		ret.put("unit", list);
 		ret.put("unitCount", list.size());
+		
+		
+		return ret;
+	}
+	
+	
+	@PostMapping("/save")
+	public  Map<String, Object> unit(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+
+		ClientInfo ci = new ClientInfo();
+		ci.setCompany((String)req.get("company"));
+		ci.setLocation((String)req.get("location"));
+		ci.setUnit((String)req.get("unit"));
+		
+		try {
+			clientInfoService.save(ci);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		ret.put("success", "True");
+		ret.put("clientNo", ci.getClientNo());
 		
 		
 		return ret;

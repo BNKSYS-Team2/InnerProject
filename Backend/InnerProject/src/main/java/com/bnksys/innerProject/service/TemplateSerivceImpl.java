@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TemplateSeriveImpl implements TemplateService {
+public class TemplateSerivceImpl implements TemplateService {
 	private final TemplateRepository templateRepository;
 	private final UseTypeRepository useTypeRepository;
 	
