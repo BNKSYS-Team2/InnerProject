@@ -7,42 +7,20 @@ const PMList = () => {
 
   const [data, setData] = useState({});
   const userNo = sessionStorage.getItem('userNo');
-  
+
   useEffect(() => {
-    Api.get(`/api/pm/list/${userNo}`).then((res) => {
+    Api.get(`api/pm/list/${userNo}`).then((res) => {
       setData(res.data);
     });
   }, []);
 
+  console.log(data);
+
+  // 이 부분만 수정하면 됨
   return (
-    <div className="container pm">
-      <h1>내 저작물 목록</h1>
-      <div className="row">
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-        <div className="col-4 pmBox">
-          <div className="pmImg">test</div>
-          <div className="pmTitle">제목</div>
-        </div>
-      </div>
+    <div>
+      <p>gddd</p>
+      <span>{data}</span>
     </div>
   );
 };
