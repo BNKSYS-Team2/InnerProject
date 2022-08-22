@@ -1,9 +1,12 @@
 import React from 'react';
-
-const Login = () => {
-  return (
-     <div>Login</div>
-  );
-};
-
-export default Login;
+import Login from '../../components/User/Login';
+ 
+function uLogin() {
+    return(
+      <>
+        <Login />
+      </>
+    );
+}
+ 
+export default uLogin;
