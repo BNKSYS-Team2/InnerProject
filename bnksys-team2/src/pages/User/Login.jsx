@@ -1,58 +1,47 @@
 import React, { useState, useEffect } from 'react';
 // import { Form, Button } from 'react-bootstrap';
 import { Container, Col, Row, Form, Button, Modal, NavLink } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 import * as Api from '../../api';
  
 function Login() {
     const [id, setId] = useState('');
-    const [pw, setPw] = useState('');
-
+    const [password, setPassword] = useState('');
     const isIdValid = id.length >= 3 || id.length <= 20;
-    const isPwValid = pw.length >= 10 || pw.length <= 20;
+    const isPwValid = password.length >= 10 || password.length <= 20;
 
     const isFormValid = isIdValid && isPwValid;
- 
-	// input data 의 변화가 있을 때마다 value 값을 변경해서 useState 해준다
-    const handleid = (e) => {
-      setId(e.target.value);
-    };
- 
-    const handlepw = (e) => {
-      setPw(e.target.value);
-    };
- 
-	// login 버튼 클릭 이벤트
-    const onClickLogin = () => {
-        console.log('click login');
-    };
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
       e.preventDefault(); 
-      try {
         // 'user/login' 엔드포인트로 post요청함.
         const res = await Api.post('api/user/login', {
           id,
-          pw,
+          password,
+        }).then(res => {
+          if(res.data.success=='True'){
+            const user = res.data;
+            const userNo = user.userNo;
+            console.log(userNo);
+            sessionStorage.setItem('userNo', userNo);
+            navigate('/main');
+            document.location.href = '/main';
+            setId('');
+            setPassword('');
+          }else{
+            setId('');
+            setPassword('');
+            e.target.reset();
+            alert('로그인에 실패하였습니다.');
+          }
+        }).catch ((err)=>{
+          console.log(err);
         });
   
-        // 기본 페이지로 이동함
-        navigate('/', { replace: true });
-        e.target.reset();
-        handleClose(false);
-        setId('');
-        setPw('');
-      } catch (err)
-       {
-         if(err.response){
-          setId('');
-          setPw('');
-          e.target.reset();
-          alert('로그인에 실패하였습니다.');
-         }
-      }
-  
-    };
+      };
   
  
     return(
@@ -88,8 +77,8 @@ function Login() {
               <Form.Control
                 type="password"
                 autoComplete="on"
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
             {!isPwValid && (

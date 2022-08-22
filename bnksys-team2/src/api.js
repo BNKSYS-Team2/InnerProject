@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const backendPortNumber = '5001';
-const serverUrl =
-  'http://' + window.location.hostname + ':' + backendPortNumber + '/';
+const serverUrl = 'http://192.168.0.124:8080/';
+//   'http://' + window.location.hostname + ':' + backendPortNumber + '/';
 
 async function get(endpoint, params = '') {
   console.log(
@@ -23,7 +23,9 @@ async function post(endpoint, data) {
   console.log(`%cPOST 요청 데이터: ${bodyData}`, 'color: #296aba;');
 
   return axios.post(serverUrl + endpoint, bodyData, {
-
+    headers:{
+        'Content-Type': 'application/json'
+    }
   });
 }
 
