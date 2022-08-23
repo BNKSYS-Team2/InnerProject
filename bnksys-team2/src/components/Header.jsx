@@ -78,8 +78,8 @@ const Header = () => {
               내 저작물
             </Link>
           </Nav>
-          <Nav.Link href="/" onClick={onLogout}>로그아웃</Nav.Link>
-          <Nav.Link href="#" onClick={deleteUser}>회원 탈퇴</Nav.Link>
+          <Nav.Link to="/" onClick={onLogout}>로그아웃</Nav.Link>
+          <Nav.Link to="#" onClick={deleteUser}>회원 탈퇴</Nav.Link>
           </>) : null }
           
         </Navbar.Collapse>
