@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import './DistributePM.scss';
 import { useNavigate } from 'react-router-dom';
 
-import PMListModal from '../../components/PM/MyPMListModal';
+import PMListModal from '../../components/PM/MyPMListModal.jsx';
 
 const DistributePM = () => {
   const [selClick, setSelClick] = useState(false);
