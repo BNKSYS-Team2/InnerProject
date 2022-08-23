@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bnksys.innerProject.domain.PromotionSchedule;
 import com.bnksys.innerProject.domain.ScheduleClient;
+import com.bnksys.innerProject.dto.DayDto;
 import com.bnksys.innerProject.dto.PromotionScheduleDto;
+import com.bnksys.innerProject.dto.TimeDto;
 import com.bnksys.innerProject.service.PromotionScheduleService;
 
 import lombok.extern.log4j.Log4j2;
@@ -63,7 +65,7 @@ public class PromotionScheduleController {
 		
 		
 		try {
-			promotionScheduleService.isSettable(ps);
+			promotionScheduleService.isSettable(ps,clientNoList);
 			promotionScheduleService.setSchedule(ps,clientNoList, pmNoList);
 		} catch (IllegalStateException e) {
 			ret.put("success", "False");
@@ -74,6 +76,61 @@ public class PromotionScheduleController {
 		
 		ret.put("success", "Ture");
 		ret.put("scheduleNo", ps.getPsNo());
+		
+		return ret;
+	}
+	
+	@PostMapping("/dayList")
+	public  Map<String, Object> getDayList(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+		List<DayDto> list = new ArrayList<DayDto>();
+		
+		String dt = (String)req.get("startDt");
+		
+		//어디로 뿌릴지 대상인 클라이언트들
+		List<Long> clientNoList = ((List<String>) (req.get("clientNo"))).stream().map((s)->Long.parseLong(s)).collect(Collectors.toList());
+		
+		try {
+			list = promotionScheduleService.getDayList(dt,clientNoList);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		
+		ret.put("success", "Ture");
+		ret.put("list", list);
+		ret.put("listCnt", list.size());
+		
+		
+		return ret;
+	}
+	
+	
+	@PostMapping("/timeList")
+	public  Map<String, Object> getTimeList(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+		List<TimeDto> list = new ArrayList<TimeDto>();
+		
+		String dt = (String)req.get("startDt");
+		
+		//어디로 뿌릴지 대상인 클라이언트들
+		List<Long> clientNoList = ((List<String>) (req.get("clientNo"))).stream().map((s)->Long.parseLong(s)).collect(Collectors.toList());
+		
+		try {
+			list = promotionScheduleService.getTimeList(dt,clientNoList);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		
+		ret.put("success", "Ture");
+		ret.put("list", list);
+		ret.put("listCnt", list.size());
+		
 		
 		return ret;
 	}

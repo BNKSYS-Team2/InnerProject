@@ -1,9 +1,11 @@
 package com.bnksys.innerProject.service;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +17,6 @@ import com.bnksys.innerProject.domain.MaterialSchedule;
 import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.PromotionSchedule;
 import com.bnksys.innerProject.domain.ScheduleClient;
-import com.bnksys.innerProject.domain.ScheduleDate;
-import com.bnksys.innerProject.domain.ScheduleDatePk;
 import com.bnksys.innerProject.dto.DayDto;
 import com.bnksys.innerProject.dto.PromotionMaterialDto;
 import com.bnksys.innerProject.dto.PromotionScheduleDto;
@@ -24,7 +24,6 @@ import com.bnksys.innerProject.dto.TimeDto;
 import com.bnksys.innerProject.repository.ClientInfoRepository;
 import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.PromotionScheduleRepository;
-import com.bnksys.innerProject.repository.ScheduleDateRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,45 +35,17 @@ import lombok.extern.log4j.Log4j2;
 public class PromotionScheduleServiceImple implements PromotionScheduleService {
 	
 	final private PromotionScheduleRepository psRepository;
-	final private ScheduleDateRepository sdRepository;
 	final private ClientInfoRepository clientInfoRepository;
 	final private PromotionMaterialRepository pmRepository;
-	
 	
 	
 	@Override
 	public boolean setSchedule(PromotionSchedule ps, List<Long> clientNoList, List<Long> pmNoList) {
 		//sdRepository에도 저장 해야함
-		ScheduleDate sd = null;
 		String strDt = ps.getStartDt().format(DateTimeFormatter.ofPattern("yyyMMddHH"));
 		String endDt = ps.getEndDt().format(DateTimeFormatter.ofPattern("yyyMMddHH"));
 		
-		int strYear = Integer.parseInt(strDt.substring(0,4));
-		int endYear = Integer.parseInt(endDt.substring(0,4));
-		
-		int strMonth = Integer.parseInt(strDt.substring(4,6));
-		int endMonth = Integer.parseInt(endDt.substring(4,6));
-		
-		int strDay = Integer.parseInt(strDt.substring(6,8));
-		int endDay = Integer.parseInt(endDt.substring(6,8));
-		
-		int strTime = Integer.parseInt(strDt.substring(8,10));
-		int endTime = Integer.parseInt(endDt.substring(8,10));
-		
-		for(int i = strYear; i<=endYear; i++) {
-			for(int j = strMonth ; j <= endMonth ; j++) {
-				for(int k = strDay ; k <= endDay ; k++) {
-					for(int l = strTime ; l <= endTime ; l++) {
-						int dt = Integer.parseInt(Integer.toString(i)+Integer.toString(j)+Integer.toString(k)+Integer.toString(l));
-						sd = sdRepository.findById(new ScheduleDatePk(i,j,k,l)).orElse(new ScheduleDate(i, j, k, l, dt, 0));
-						sd.setPmCnt(sd.getPmCnt()+1);
-						if(sd.getPmCnt() >3)
-							throw new IllegalStateException("이미 "+dt+" 예약건이 가득 찼습니다");
-						sdRepository.save(sd);
-					}
-				}
-			}
-		}
+		log.info("/api/schedule/save"+ strDt + " " + endDt);
 		
 		for(Long i : clientNoList) {
 			ClientInfo ci = clientInfoRepository.findById(i).orElseThrow(() -> new IllegalStateException(i+" 클라이언트번호가 존재하지 않습니다"));
@@ -93,42 +64,63 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 	}
 
 	@Override
-	public boolean isSettable(PromotionSchedule ps) {
-		//해당 저작물이 등록가능한지 여부 리턴
-		int startDt = Integer.parseInt(ps.getStartDt().format(DateTimeFormatter.ofPattern("yyyMMddHH")));
-		int endDt = Integer.parseInt(ps.getEndDt().format(DateTimeFormatter.ofPattern("yyyMMddHH")));
+	public boolean isSettable(PromotionSchedule ps, List<Long> clientNoList) {
+		//해당 저작물이 등록가능한지 여부 리턴	
 		
-		boolean bool1 = sdRepository.existsByDtGreaterThanEqualAndDtLessThanAndPmCntGreaterThanEqual(startDt, endDt, 3).get();
-		log.info(startDt + " "+ endDt+ " " +bool1);
+		for(Long l : clientNoList) {
+			ClientInfo ci = clientInfoRepository.findById(l).orElseThrow(()->new IllegalStateException(l+" 클라이언트번호가 존재하지 않습니다"));
+			int cnt = psRepository.getPromotinMaterialCountByClientNo(ci,ps.getStartDt(),ps.getEndDt()).get();
+			if(cnt >= 3) {
+				throw new IllegalStateException("이미 예약이 가득 찼습니다 clientNo : "+ci.getClientNo());
+			}
 		
-		if(bool1 == true) {
-			throw new IllegalStateException("해당시간은 이미 예약이 가득 찼습니다");
-		}		
+		}
+
+		
 		
 		return true;
 	}
 
 	@Override
-	public List<DayDto> getDayList(int year, int month) {
+	public List<DayDto> getDayList(String dt, List<Long> clientNoList) {
 		List<DayDto> ret = new ArrayList<DayDto>();
-		List<DayDto> list = new ArrayList<DayDto>();
 		
-		int lastDay = getLastDateOfMonth(year, month);
+		int lastDay = getLastDateOfMonth(Integer.parseInt(dt.substring(0,4)), Integer.parseInt(dt.substring(4,6)));		
 		
-		list = sdRepository.findDay(year, month)
-				.orElse(new ArrayList<>())
-				.stream().map((p)->new DayDto(year, month,p,false))
-				.collect(Collectors.toList());
+		DateTimeFormatter DATEFORMATTER = new DateTimeFormatterBuilder()
+				.append(DateTimeFormatter.ofPattern("yyyyMM"))
+				.parseDefaulting(ChronoField.DAY_OF_MONTH, 1)	// 1일
+				.parseDefaulting(ChronoField.HOUR_OF_DAY, 0)	// 0시
+			    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)// 분은 0으로 
+			    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0) // 초도 0으로
+			    .toFormatter();
+			
+		LocalDateTime startDt = LocalDateTime.parse(dt, DATEFORMATTER);
+		LocalDateTime endDt = startDt.plusDays(1);
+		int year = Integer.parseInt(dt.substring(0,4));
+		int month = Integer.parseInt(dt.substring(4,6));
+		boolean isFull = false;
 		
-		Collections.sort(list,(p1,p2)->p1.getDay()-p2.getDay());
-		
-		int listidx = 0;
-		for(int i = 1; i <= lastDay; i++) {
-			if(list.get(listidx).getDay() == i) {
-				ret.add(new DayDto(year, month, i, list.get(listidx++).isBookable()));
+		for(int i = 1 ; i <=lastDay ; i ++) {
+			isFull = false;
+			for(Long l : clientNoList) {
+				ClientInfo ci = clientInfoRepository.findById(l).orElseThrow(()->new IllegalStateException(l+" 클라이언트번호가 존재하지 않습니다"));
+				int cnt = psRepository.getPromotinMaterialCountByClientNo(ci,startDt,endDt).get();
+				
+				if(cnt >= 3) {
+					ret.add(new DayDto(year, month, i, false));
+					isFull = true;
+					break;
+				}
 			}
-			ret.add(new DayDto(year, month, i, true));
+			if(isFull == false) {
+				ret.add(new DayDto(year, month, i, true));
+			}
+			startDt = startDt.plusDays(1);
+			endDt = endDt.plusDays(1);
+			
 		}
+		
 		
 		//주어진 년,월에 대해 1일부터 마지막일까지의 예약 가능여부 리턴
 		
@@ -136,28 +128,45 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 	}
 
 	@Override
-	public List<TimeDto> getTimeList(int year,int month, int day) {
-		List<TimeDto> ret = new ArrayList<TimeDto>();
-		List<TimeDto> list = new ArrayList<TimeDto>();
+	public List<TimeDto> getTimeList(String dt, List<Long> clientNoList) {
+	List<TimeDto> ret = new ArrayList<TimeDto>();	
 		
+		DateTimeFormatter DATEFORMATTER = new DateTimeFormatterBuilder()
+				.append(DateTimeFormatter.ofPattern("yyyyMMdd"))
+				.parseDefaulting(ChronoField.HOUR_OF_DAY, 9)	// 0시
+			    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)// 분은 0으로 
+			    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0) // 초도 0으로
+			    .toFormatter();
+			
+		LocalDateTime startDt = LocalDateTime.parse(dt, DATEFORMATTER);
+		LocalDateTime endDt = startDt.plusHours(1);
+		int year = Integer.parseInt(dt.substring(0,4));
+		int month = Integer.parseInt(dt.substring(4,6));
+		int day = Integer.parseInt(dt.substring(6,8));
 		
+		boolean isFull = false;
 		
-		list = sdRepository.findTime(year, month, day)
-				.orElse(new ArrayList<>())
-				.stream().map((p)->new TimeDto(year, month, day, p.get("time"),p.get("pmCnt")))
-				.collect(Collectors.toList());
-		
-		Collections.sort(list,(p1,p2)->p1.getTime()-p2.getTime());
-		
-		
-		int listidx = 0;
-		//9시부터 18시까지만 예약가능
-		for(int i = 9; i <= 18; i++) {
-			if(list.get(listidx).getDay() == i) {
-				ret.add(new TimeDto(year, month, day, i, list.get(listidx++).getPmCnt()));
+		for(int i = 9 ; i <=18 ; i ++) {
+			isFull = false;
+			for(Long l : clientNoList) {
+				ClientInfo ci = clientInfoRepository.findById(l).orElseThrow(()->new IllegalStateException(l+" 클라이언트번호가 존재하지 않습니다"));
+				int cnt = psRepository.getPromotinMaterialCountByClientNo(ci,startDt,endDt).get();
+				
+				if(cnt >= 3) {
+					ret.add(new TimeDto(year, month, day, i, false));
+					isFull = true;
+					break;
+				}
 			}
-			ret.add(new TimeDto(year, month, day, i, 0));
+			if(isFull == false) {
+				ret.add(new TimeDto(year, month, day, i, true));
+			}
+			startDt = startDt.plusHours(1);
+			endDt = endDt.plusHours(1);
 		}
+		
+		
+		//9시부터 18시까지만 예약 가능
 		
 		return ret;
 	}
@@ -180,8 +189,7 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 				)).collect(Collectors.toList());
 		
 		return ret;
-	}
-	
+	}	
 	
 	public int getLastDateOfMonth(int year, int month) {	
 		
@@ -190,5 +198,7 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 		
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
+
+
 
 }

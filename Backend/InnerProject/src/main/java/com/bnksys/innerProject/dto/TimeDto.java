@@ -24,11 +24,6 @@ public class TimeDto {
 	//시간
 	private int time;
 	
-	//예약된 저작물 갯수
-	private int pmCnt;
-	
-	public TimeDto(int time, int pmCnt) {
-		this.time = time;
-		this.pmCnt = pmCnt;
-	}
+	//예약 가능 여부
+	private boolean isBookable;
 }

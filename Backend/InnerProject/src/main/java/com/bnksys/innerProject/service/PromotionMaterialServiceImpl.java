@@ -1,14 +1,18 @@
 package com.bnksys.innerProject.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bnksys.innerProject.domain.ClientInfo;
 import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.UseType;
 import com.bnksys.innerProject.dto.PromotionMaterialDto;
+import com.bnksys.innerProject.repository.ClientInfoRepository;
 import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.UseTypeRepository;
 import com.bnksys.innerProject.repository.UserRepository;
@@ -25,6 +29,7 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 	private final PromotionMaterialRepository pmRepository;
 	private final UserRepository userRepository;
 	private final UseTypeRepository useTypeRepository;
+	private final ClientInfoRepository clientInfoRepository;
 	
 	
 	
@@ -65,7 +70,7 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 			throw new IllegalStateException("존재하지 않는 아이디 입니다");
 		
 		//List<PromotionMaterial> -> List<PromotionMaterialDto> 형변환 후 리턴
-		return pmRepository.findByUserNo(userNo).get()
+		return pmRepository.findByUserNo(userNo).orElse(new ArrayList<>())
 				.stream().map(pm->new PromotionMaterialDto(pm.getPmNo(),pm.getPmTitle(),pm.getUtNo())).collect(Collectors.toList());
 	}
 
@@ -77,7 +82,18 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 		UseType ut = useTypeRepository.findById(utNo).orElseThrow(()->new IllegalStateException("존재하지 않는 용도타입 입니다"));
 
 		//List<PromotionMaterial> -> List<PromotionMaterialDto> 형변환 후 리턴
-		return pmRepository.findByUserNoAndUtNo(userNo,ut).get()
+		return pmRepository.findByUserNoAndUtNo(userNo,ut).orElse(new ArrayList<>())
+				.stream().map(pm->new PromotionMaterialDto(pm.getPmNo(),pm.getPmTitle(),pm.getUtNo())).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<PromotionMaterialDto> getClientScheduleList(long clientNo) {
+		ClientInfo ci = null;
+		ci = clientInfoRepository.findById(clientNo).orElseThrow(()-> new IllegalStateException("존재하지 않는 클라이언트 입니다"));
+		
+		log.info(LocalDateTime.now()+" /api/pm/now/"+clientNo);
+		
+		return pmRepository.findpmNoListByClientNo(ci, LocalDateTime.now()).orElse(new ArrayList<>())
 				.stream().map(pm->new PromotionMaterialDto(pm.getPmNo(),pm.getPmTitle(),pm.getUtNo())).collect(Collectors.toList());
 	}
 

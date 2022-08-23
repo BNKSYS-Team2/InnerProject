@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.UseType;
 import com.bnksys.innerProject.dto.PromotionMaterialDto;
+import com.bnksys.innerProject.dto.PromotionScheduleDto;
 import com.bnksys.innerProject.service.FileService;
 import com.bnksys.innerProject.service.PromotionMaterialService;
 
@@ -252,6 +253,31 @@ public class PromotionMaterialController {
 		}
 		
 		ret.put("success", "True");
+		
+		return ret;
+	}
+	
+	@GetMapping("/now/{clientNo}")
+	public  Map<String, Object> loadClientList(			
+			@PathVariable(name = "clientNo") long clientNo,
+			HttpServletRequest request) {
+		Map<String, Object> ret = new HashMap<>();
+
+		List<PromotionMaterialDto> list = new ArrayList<>();
+		
+		try {
+			list=pmService.getClientScheduleList(clientNo);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		
+		ret.put("success", "Ture");
+		ret.put("list", list);
+		ret.put("listCnt", list.size());
+		
 		
 		return ret;
 	}

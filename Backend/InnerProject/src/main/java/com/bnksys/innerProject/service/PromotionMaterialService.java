@@ -21,4 +21,8 @@ public interface PromotionMaterialService {
 	
 	//용도타입일치하는 작업물 리스트 조회
 	List<PromotionMaterialDto> loadListUseTypeNo(long userNo, long utNo);
+	
+	//클라이언트번호를 통해 현재 배포되어야 할 저작물 번호 리스트 리턴
+	List<PromotionMaterialDto> getClientScheduleList(long clientNo);
+	
 }
