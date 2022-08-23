@@ -18,12 +18,38 @@ const PMList = () => {
     // await Api.get(`api/pm/load/${userNo}/${pmNo}`);
 
    };
-  // 이 부분만 수정하면 됨
    
   return (
     <>
-    <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'}></img>
-    <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'}></img>
+    <div className = "container pm">
+      <h1>내 저작물 목록</h1>
+      <div className = "row">
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">고양이</div>
+        </div>
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">제목</div>
+        </div>
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">고양이</div>
+        </div>
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">제목</div>
+        </div>
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">고양이</div>
+        </div>
+        <div className="col-4 pmBox">
+          <img src = {'http://192.168.0.124:8080/api/pm/load/6/7'} className = "pmImg"></img>
+          <div className="pmTitle">제목</div>
+        </div>
+      </div>
+    </div>
     </>
   );
 };

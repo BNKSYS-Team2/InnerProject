@@ -19,7 +19,7 @@ export const Routing = () => {
       setIsLogin(true);
       console.log('isLogin ?? :: ', isLogin);
     }
-  },[]);
+  },[isLogin]);
 
   return (
     <BrowserRouter>

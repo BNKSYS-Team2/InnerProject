@@ -37,6 +37,42 @@ const DistributeList = () => {
               <button className="cancelBtn">취소</button>
             </td>
           </tr>
+          <tr>
+            <td>테스트 저작물1, 테스트 저작물2</td>
+            <td>부산은행-범내골점-세로FHD</td>
+            <td>홍길동</td>
+            <td>2022-08-18-11:00 ~ 2022-08-18-12:00</td>
+            <td>
+              <button className="cancelBtn">취소</button>
+            </td>
+          </tr>
+          <tr>
+            <td>테스트 저작물1, 테스트 저작물2</td>
+            <td>부산은행-범내골점-세로FHD</td>
+            <td>홍길동</td>
+            <td>2022-08-18-11:00 ~ 2022-08-18-12:00</td>
+            <td>
+              <button className="cancelBtn">취소</button>
+            </td>
+          </tr>
+          <tr>
+            <td>테스트 저작물1, 테스트 저작물2</td>
+            <td>부산은행-범내골점-세로FHD</td>
+            <td>홍길동</td>
+            <td>2022-08-18-11:00 ~ 2022-08-18-12:00</td>
+            <td>
+              <button className="cancelBtn">취소</button>
+            </td>
+          </tr>
+          <tr>
+            <td>테스트 저작물1, 테스트 저작물2</td>
+            <td>부산은행-범내골점-세로FHD</td>
+            <td>홍길동</td>
+            <td>2022-08-18-11:00 ~ 2022-08-18-12:00</td>
+            <td>
+              <button className="cancelBtn">취소</button>
+            </td>
+          </tr>
         </tbody>
       </Table>
     </div>
