@@ -47,18 +47,6 @@ const Header = () => {
 
 
   return (
-    // <Navbar collapseOnSelect expand="lg">
-    //   <Container>
-    //     <div className="logo">로고</div>
-    //     <Navbar.Collapse id="responsive-navbar-nav" style={{ textAlign: 'center' }}>
-    //       <Nav className="nav-menu ms-auto">
-    //         <Link to="/">저작물 생성</Link>
-    //         <Link to="/">저작물 배포</Link>
-    //         <Link to="/">내 저작물</Link>
-    //       </Nav>
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
     <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="#home">LOGO</Navbar.Brand>
@@ -67,14 +55,20 @@ const Header = () => {
           {isLogin ? (
             <>
           <Nav className="me-auto">
-            <Nav.Link href="#">저작물 생성</Nav.Link>
-            <Nav.Link href="#">저작물 배포</Nav.Link>
-            <Nav.Link href="#">내 저작물</Nav.Link>
+            <Link to="/" className="nav-link" style={{ color: 'white' }}>
+              저작물 생성
+            </Link>
+            <Link to="/distribute" className="nav-link" style={{ color: 'white' }}>
+              저작물 배포
+            </Link>
+            {/* <Nav.Link href="/mypm">내 저작물</Nav.Link> */}
+            <Link to="/mypm" className="nav-link" style={{ color: 'white' }}>
+              내 저작물
+            </Link>
           </Nav>
           <Nav.Link href="/" onClick={onLogout}>로그아웃</Nav.Link>
           <Nav.Link href="#" onClick={deleteUser}>회원 탈퇴</Nav.Link>
           </>) : null }
-          
         </Navbar.Collapse>
       </Container>
     </Navbar>

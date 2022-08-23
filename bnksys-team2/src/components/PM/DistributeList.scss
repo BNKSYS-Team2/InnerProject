@@ -1,0 +1,32 @@
+.distribute {
+  h1 {
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 26px;
+    font-weight: bolder;
+  }
+  .cancelBtn {
+    width: 70px;
+    height: 30px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    &:hover {
+      background-color: #bbb;
+    }
+  }
+  .table {
+    th {
+      color: #fff;
+      background-color: #fa0717;
+      &:nth-child(even) {
+        color: #fff;
+      }
+    }
+
+    td {
+      font-weight: 500;
+      vertical-align: middle;
+    }
+  }
+}

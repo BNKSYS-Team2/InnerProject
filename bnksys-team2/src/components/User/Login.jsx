@@ -26,8 +26,8 @@ const Login = () => {
             const userNo = user.userNo;
             console.log(userNo);
             sessionStorage.setItem('userNo', userNo);
-            navigate('/main');
-            document.location.href = '/main';
+            navigate('/mypm');
+            document.location.href = '/mypm';
             setId('');
             setPassword('');
           }else{
