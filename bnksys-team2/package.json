@@ -104,7 +104,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && webpack --node-env production --config webpack.prod.js && typedoc",
     "build:lib": "npm run tsc && webpack --node-env production --config webpack.lib.js",
-    "start": "npm install && npm run start:dev",
+    "start": "npm run start:dev",
     "start:dev": "webpack serve --config webpack.dev.js",
     "serve": "http-server docs -p 4001",
     "ghpages": "npm run build && node scripts/ghpages",
