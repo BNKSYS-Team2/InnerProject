@@ -150,6 +150,52 @@ public class PromotionMaterialController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
+	
+	@GetMapping("/load/{pmNo}")
+	public  ResponseEntity<?> load(
+			@PathVariable(name = "pmNo") Long pmNo,
+			HttpServletRequest request
+			) {
+		Map<String, Object> ret = new HashMap<>();
+		Resource resource = null;
+
+		PromotionMaterial pm = new PromotionMaterial();
+		pm.setPmNo(pmNo);
+		String fileName = null;
+		
+		try {
+			pm = pmService.load(pm);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+		
+		fileName = pm.getPmNo() + "." +pm.getFileExtension();			
+		
+		try {
+			resource = fileService.loadFile(fileName);
+		} catch (FileNotFoundException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			log.info("Could not determine file type.");
+		}
+
+		// Fallback to the default content type if type could not be determined
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
 
 	
 	

@@ -23,18 +23,18 @@ public class UserServiceImpl implements UserService {
 		String msg = "";
 		
 		
-		if (3>userId.length() || userId.length()>20) {
-			msg = "아이디는 3자이상, 20자 이하로 입력하여 주십시오";
-			throw new IllegalStateException(msg);
-		}
-		if (10>userPassword.length() || userPassword.length()>20) {
-			msg = "비밀번호는 10자이상, 20자 이하로 입력하여 주십시오";
-			throw new IllegalStateException(msg);
-		}
-		if (2>userName.length() || userName.length()>10) {
-			msg = "이름은 2자이상, 10자 이하로 입력하여 주십시오";
-			throw new IllegalStateException(msg);
-		}
+//		if (3>userId.length() || userId.length()>20) {
+//			msg = "아이디는 3자이상, 20자 이하로 입력하여 주십시오";
+//			throw new IllegalStateException(msg);
+//		}
+//		if (10>userPassword.length() || userPassword.length()>20) {
+//			msg = "비밀번호는 10자이상, 20자 이하로 입력하여 주십시오";
+//			throw new IllegalStateException(msg);
+//		}
+//		if (2>userName.length() || userName.length()>10) {
+//			msg = "이름은 2자이상, 10자 이하로 입력하여 주십시오";
+//			throw new IllegalStateException(msg);
+//		}
 		
 		//아이디 중복확인
 		if (userRepository.findByUserId(user.getUserId()).isPresent())
