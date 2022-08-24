@@ -56,7 +56,7 @@ const Header = () => {
           {isLogin ? (
             <>
               <Nav className="me-auto">
-                <Link to="/create" className="nav-link" style={{ color: 'white' }}>
+                <Link to="/select" className="nav-link" style={{ color: 'white' }}>
                   저작물 생성
                 </Link>
                 <Link to="/distribute" className="nav-link" style={{ color: 'white' }}>

@@ -16,10 +16,9 @@ const UseTypeList = (props) => {
       const res = await Api.get('api/useType/list');
     setUeTypeList(res.data.useTypeList);
     };
-  // 템플릿 선택
 
-  const tableElementClick = (utNo) => {    
-    props.setSelectedUseType(utNo);
+  const tableElementClick = (utNo,w,h) => {    
+    props.setSelectedUseType({utNo,w,h});
   }
 
   return(
@@ -35,7 +34,7 @@ const UseTypeList = (props) => {
           </thead>          
           {useTypeList.map((useType, index) => {
             return (
-              <tbody key={index} onClick={() => { tableElementClick(useType.utNo) }}>
+              <tbody key={index} onClick={() => { tableElementClick(useType.utNo,useType.width,useType.height) }}>
                   <tr>
                     <td>{useType.utName}</td>
                     <td>{useType.width}</td>

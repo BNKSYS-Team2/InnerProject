@@ -33,8 +33,7 @@ export const Routing = () => {
         <Route path="mypm" element={<MyPM />} />
         <Route path="distribute" element={<Distribute />} />
         <Route path="select" element={<SelectTemplate />} />
-        <Route path="create" element={<CreatePM2 />} />
-        
+        <Route path="create" element={<CreatePM2 />} />        
         {isLogin ? (
           // Main 컴포넌트 호출 시 isLogin 이라는 props 값을 전달
           <Route path="mypm" element={<MyPM />} />
