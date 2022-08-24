@@ -23,5 +23,7 @@ public interface ClientInfoRepository extends JpaRepository<ClientInfo, Long>{
 	//단말기목록 가져오기
 	@Query("SELECT ci FROM ClientInfo ci where ci.company = :company and ci.location = :location")
 	Optional<List<ClientInfo>> findUnit(@Param("company") String company, @Param("location") String location);
-		
+	
+	Optional<ClientInfo> findByCompanyAndLocationAndUnit(String company, String location, String unit);
+	
 }

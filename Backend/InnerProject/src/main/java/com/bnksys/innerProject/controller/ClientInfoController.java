@@ -130,4 +130,28 @@ public class ClientInfoController {
 		
 		return ret;
 	}
+	
+	@PostMapping("/login")
+	public  Map<String, Object> login(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+
+		ClientInfo ci = new ClientInfo();
+		ci.setCompany((String)req.get("company"));
+		ci.setLocation((String)req.get("location"));
+		ci.setUnit((String)req.get("unit"));
+		long clientNo = 0;
+		try {
+			clientNo=clientInfoService.login(ci);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		ret.put("success", "True");
+		ret.put("clientNo", clientNo);
+		
+		
+		return ret;
+	}
 }

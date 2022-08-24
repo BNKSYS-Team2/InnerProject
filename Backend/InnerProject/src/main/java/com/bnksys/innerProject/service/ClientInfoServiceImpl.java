@@ -39,8 +39,18 @@ public class ClientInfoServiceImpl implements ClientInfoService {
 
 	@Override
 	public boolean save(ClientInfo ci) {
+		if(clientInfoRepository.findByCompanyAndLocationAndUnit(ci.getCompany(),ci.getLocation(),ci.getUnit()).isPresent() == true) {
+			throw new IllegalStateException("이미 해당클라이언트가 존재합니다");
+		}
+		
 		clientInfoRepository.save(ci);
 		return true;
+	}
+
+	@Override
+	public long login(ClientInfo ci) {
+		ci = clientInfoRepository.findByCompanyAndLocationAndUnit(ci.getCompany(),ci.getLocation(),ci.getUnit()).orElseThrow(()->new IllegalStateException("해당클라이언트가 존재하지 않습니다"));
+		return ci.getClientNo();
 	}
 
 }

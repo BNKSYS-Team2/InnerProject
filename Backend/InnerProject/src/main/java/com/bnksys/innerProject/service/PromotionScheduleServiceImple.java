@@ -90,13 +90,13 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 		DateTimeFormatter DATEFORMATTER = new DateTimeFormatterBuilder()
 				.append(DateTimeFormatter.ofPattern("yyyyMM"))
 				.parseDefaulting(ChronoField.DAY_OF_MONTH, 1)	// 1일
-				.parseDefaulting(ChronoField.HOUR_OF_DAY, 0)	// 0시
+				.parseDefaulting(ChronoField.HOUR_OF_DAY, 9)	// 0시
 			    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)// 분은 0으로 
 			    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0) // 초도 0으로
 			    .toFormatter();
 			
 		LocalDateTime startDt = LocalDateTime.parse(dt, DATEFORMATTER);
-		LocalDateTime endDt = startDt.plusDays(1);
+		LocalDateTime endDt = startDt.plusHours(9);
 		int year = Integer.parseInt(dt.substring(0,4));
 		int month = Integer.parseInt(dt.substring(4,6));
 		boolean isFull = false;

@@ -16,4 +16,6 @@ public interface ClientInfoService {
 	List<ClientUnitDto> unit(String company, String location);
 	
 	boolean save(ClientInfo ci);
+	
+	long login(ClientInfo ci);
 }
