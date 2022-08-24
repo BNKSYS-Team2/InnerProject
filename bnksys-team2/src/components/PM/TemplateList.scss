@@ -1,0 +1,22 @@
+.pm {
+  margin-bottom: 45px;
+  h1 {
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 26px;
+    font-weight: bolder;
+  }
+  .pmBox {
+    margin-bottom: 50px;
+    .pmImg {
+      background-color: bisque;
+      width: 100%;
+      height: auto;
+      max-width: 300px;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}

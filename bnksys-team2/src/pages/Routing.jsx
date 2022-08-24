@@ -4,7 +4,8 @@ import Header from '../components/Header.jsx';
 import MyPM from './PM/MyPM.jsx';
 import Login from './User/Login.jsx';
 import Distribute from './PM/DistributePM.jsx';
-// import Create from './PM/CreatePM.tsx';
+import SelectTemplate from './PM/SelectTemplate.jsx';
+import CreatePM2 from './PM/CreatePM2.jsx';
 
 export const Routing = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -31,7 +32,9 @@ export const Routing = () => {
         <Route path="/" element={<Login />} />
         <Route path="mypm" element={<MyPM />} />
         <Route path="distribute" element={<Distribute />} />
-        {/* <Route path="create" element={<Create />} /> */}
+        <Route path="select" element={<SelectTemplate />} />
+        <Route path="create" element={<CreatePM2 />} />
+        
         {isLogin ? (
           // Main 컴포넌트 호출 시 isLogin 이라는 props 값을 전달
           <Route path="mypm" element={<MyPM />} />
