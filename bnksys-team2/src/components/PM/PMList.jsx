@@ -4,13 +4,14 @@ import * as Api from '../../api';
 
 const PMList = () => {
   const [imageList, setImageList] = useState([]);
+
   const userNo = sessionStorage.getItem('userNo');
 
   useEffect(() => {
-    getData();
+    getImageData();
   }, []);
 
-  const getData = async () => {
+  const getImageData = async () => {
     const res = await Api.get(`api/pm/list/${userNo}`);
     setImageList(res.data.pmList);
   };

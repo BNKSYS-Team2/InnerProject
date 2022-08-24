@@ -24,9 +24,8 @@ const Login = () => {
           if(res.data.success=='True'){
             const user = res.data;
             const userNo = user.userNo;
-            console.log(userNo);
             sessionStorage.setItem('userNo', userNo);
-            navigate('/mypm');
+            // navigate('/mypm');
             document.location.href = '/mypm';
             setId('');
             setPassword('');

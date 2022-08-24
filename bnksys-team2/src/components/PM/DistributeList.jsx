@@ -1,51 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+import * as Api from '../../api';
 
 import './DistributeList.scss';
 
 const DistributeList = () => {
-  const [change1, setChange1] = useState('취소 가능');
-  const [change2, setChange2] = useState('취소 가능');
-  const [change3, setChange3] = useState('취소 가능');
 
-  const cancelCheck1 = () => {
-    if(window.confirm('정말로 취소하시겠습니까?')){
-      alert('취소가 완료되었습니다.');
-      setChange1('취소 완료');
-    }
-  };
-  const cancelCheck2 = () => {
-    if(window.confirm('정말로 취소하시겠습니까?')){
-      alert('취소가 완료되었습니다.');
-      setChange2('취소 완료');
-    }
-  };
-  const cancelCheck3 = () => {
-    if(window.confirm('정말로 취소하시겠습니까?')){
-      alert('취소가 완료되었습니다.');
-      setChange3('취소 완료');
-    }
-  };
+  const [distributeList, setDistributeList] = useState([]);
 
-  const tobbleBtn1 = () => {
-    const btn1 = document.getElementById('btn1');
-    if(btn1.style.display !== 'none') {
-      btn1.style.display = 'none';
-    }
-  };
-  const tobbleBtn2 = () => {
-    const btn2 = document.getElementById('btn2');
-    if(btn2.style.display !== 'none') {
-      btn2.style.display = 'none';
-    }
-  };
-  const tobbleBtn3 = () => {
-    const btn3 = document.getElementById('btn3');
-    if(btn3.style.display !== 'none') {
-      btn3.style.display = 'none';
-    }
+  const userNo = sessionStorage.getItem('userNo');
+
+  useEffect(() => {
+    getDistributeData();
+  }, []);
+
+  const getDistributeData = async () => {
+    const res = await Api.get(`api/schedule/list/${userNo}`);
+    setDistributeList(res.data.list);
   };
 
   return (
@@ -56,13 +28,36 @@ const DistributeList = () => {
           <tr>
             <th>저작물 제목</th>
             <th>배포지점</th>
-            <th>등록자</th>
             <th>배포일시</th>
             <th>취소여부</th>
             <th>배포취소</th>
           </tr>
         </thead>
-        <tbody>
+        
+          {distributeList.map((distribute, index) => {
+              return(
+                <>
+                {distribute.clients.map((client, cIndex) => {
+                  return(
+                    <tbody key = {index}>
+                      <tr>
+                        <td>{distribute.promotionMaterials[cIndex].pmTitle}</td>
+                        <td>{client.company}-{client.location}-{client.utNo.utName}</td>
+                        <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
+                        <td>취소 가능</td>
+                        <td>
+                          <button className="cancelBtn1">취소</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+
+                </>
+              );
+            })}
+
+        {/* <tbody>
           <tr>
             <td>test, test2</td>
             <td>부산은행-범내골점-가로FHD</td>
@@ -102,7 +97,7 @@ const DistributeList = () => {
                 }}>취소</button>
             </td>
           </tr>
-        </tbody>
+        </tbody> */}
       </Table>
     </div>
   );
