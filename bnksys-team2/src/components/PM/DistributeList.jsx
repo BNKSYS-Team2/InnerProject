@@ -39,17 +39,23 @@ const DistributeList = () => {
                 <>
                 {distribute.clients.map((client, cIndex) => {
                   return(
-                    <tbody key = {index}>
-                      <tr>
-                        <td>{distribute.promotionMaterials[cIndex].pmTitle}</td>
-                        <td>{client.company}-{client.location}-{client.utNo.utName}</td>
-                        <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
-                        <td>취소 가능</td>
-                        <td>
-                          <button className="cancelBtn1">취소</button>
-                        </td>
-                      </tr>
+                    <>
+                      {distribute.promotionMaterials.map((promotionMaterial, pmIndex)=>{
+                        return(
+                          <tbody key = {index}>
+                            <tr>
+                              <td>{promotionMaterial.pmTitle}</td>
+                              <td>{client.company}-{client.location}-{client.utNo.utName}</td>
+                              <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
+                              <td>취소 가능</td>
+                              <td>
+                                <button className="cancelBtn1">취소</button>
+                              </td>
+                            </tr>
                     </tbody>
+                        );
+                      })}
+                      </>
                   );
                 })}
 
