@@ -1,6 +1,9 @@
 package com.bnksys.innerProject.service;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -55,9 +58,35 @@ public class FileServiceImpl implements FileService {
 		String fileName = Long.toString(pl_fileName)+"."+tmpstr[tmpstr.length-1];
 		
 		Path location = this.dirLocation.resolve(fileName);
-		try {
+		try {			
 			/* 실제 파일이 upload 되는 부분 */
 			Files.copy(multipartFile.getInputStream(), location, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return fileName;
+	}
+	
+	@Override
+	public String saveFileByString(String str, long pl_fileName, String fileExtension) {		
+		File file=null;
+		BufferedWriter writer = null;
+		String fileName = Long.toString(pl_fileName)+"."+fileExtension;
+		
+		Path location = this.dirLocation.resolve(fileName);
+		
+		file = new File(location.toUri());
+		
+		
+		try {
+			//파일생성
+			file.createNewFile();
+			writer = new BufferedWriter(new FileWriter(file, true));
+			writer.write(str);
+	        writer.flush();
+	        writer.close();
+//			Path newFilePath = Files.createFile(location);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

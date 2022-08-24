@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bnksys.innerProject.domain.ClientInfo;
 import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.UseType;
 import com.bnksys.innerProject.dto.PromotionMaterialDto;
@@ -96,6 +97,51 @@ public class PromotionMaterialController {
 		return ret;
 	}
 	
+	@PostMapping("/saveString")
+	public Map<String, Object> saveString(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+
+		PromotionMaterial pm = new PromotionMaterial();
+		pm.setPmTitle((String)req.get("title"));
+		pm.setUserNo(Long.parseLong((String)req.get("userNo")));
+		pm.setUtNo(new UseType(Long.parseLong((String)req.get("utNo"))));
+		pm.setFileExtension("svg");
+		
+		String svgStr = (String)req.get("svgString");
+		Long pmNo = null;
+
+		
+		
+		// 데이터베이스에 저장
+		try {
+			pmNo = pmService.save(pm);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		
+		
+		// 파일 저장
+		try {
+			fileService.saveFileByString(svgStr, pmNo,"svg");
+		} catch (IllegalStateException e) {
+			try {
+				pmService.delete(pm);
+			} catch (IllegalStateException e2) {
+				ret.put("success", "False");
+				ret.put("msg", e2.getMessage());
+				return ret;
+			}
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		ret.put("success", "True");
+		ret.put("msg", "저장 성공");
+
+		return ret;
+	}
 	
 	@GetMapping("/load/{userNo}/{pmNo}")
 	public  ResponseEntity<?> load(

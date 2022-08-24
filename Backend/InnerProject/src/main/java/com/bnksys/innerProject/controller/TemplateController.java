@@ -2,6 +2,7 @@ package com.bnksys.innerProject.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -130,6 +131,7 @@ public class TemplateController {
 			return new ResponseEntity<>(ret, HttpStatus.OK);
 		}
 
+		
 		String contentType = null;
 		try {
 			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
@@ -146,6 +148,56 @@ public class TemplateController {
 				.body(resource);
 	}
 
+	@GetMapping("/loadString/{temNo}")
+	public  ResponseEntity<?> loadString(
+			@PathVariable(name = "temNo") Long temNo,
+			HttpServletRequest request
+			) {
+		Map<String, Object> ret = new HashMap<>();
+		List<String> list = null;
+		Resource resource = null;
+
+		Template tmp = new Template();
+		tmp.setTemNo(temNo);
+		String fileName = null;
+		
+		try {
+			tmp = templateService.load(tmp);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+		
+		fileName = tmp.getTemNo() + ".svg" ;			
+		
+		try {
+			resource = fileService.loadFile(fileName);
+		} catch (FileNotFoundException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+
+		try {
+			log.info("file String");
+			list=Files.readAllLines(resource.getFile().toPath());
+		} catch (Exception e) {
+			ret.put("success", "False");
+			ret.put("msg", "파일로드 실패");
+		}
+		
+		StringBuilder sb = new StringBuilder();
+        for (String item : list) {
+            sb.append(item);
+            sb.append(" ");
+        }
+        
+		ret.put("fileString",sb.toString());
+		ret.put("success", "True");
+	
+		return new ResponseEntity<>(ret, HttpStatus.OK);
+	}
 	
 	
 	@GetMapping("/searchList/{searchValue}")
@@ -198,5 +250,30 @@ public class TemplateController {
 		
 		return ret;
 	}
+
+	@GetMapping("/list/{utNo}")
+	public  Map<String, Object> loadList(
+			@PathVariable(name = "utNo") Long utNo,
+			HttpServletRequest request
+			) {
+		Map<String, Object> ret = new HashMap<>();
+
+		List<Template> tmp = new ArrayList<>();
+		
+		
+		try {
+			tmp = templateService.loadList(utNo);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
 	
+		
+		ret.put("temList", tmp);
+		ret.put("temCount", tmp.size());
+		
+		
+		return ret;
+	}
 }

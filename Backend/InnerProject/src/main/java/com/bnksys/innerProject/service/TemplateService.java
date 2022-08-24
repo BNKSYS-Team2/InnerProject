@@ -18,6 +18,9 @@ public interface TemplateService {
 	//모두 가져오기
 	List<Template> loadList();
 	
+	//용도타입별 가져오기
+	List<Template> loadList(long utNo);
+	
 	//템플릿 가져오기
 	Template load(Template tmp);
 	

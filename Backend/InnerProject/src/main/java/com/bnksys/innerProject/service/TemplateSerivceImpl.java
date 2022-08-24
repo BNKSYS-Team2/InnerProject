@@ -1,11 +1,13 @@
 package com.bnksys.innerProject.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bnksys.innerProject.domain.Template;
+import com.bnksys.innerProject.domain.UseType;
 import com.bnksys.innerProject.repository.TemplateRepository;
 import com.bnksys.innerProject.repository.UseTypeRepository;
 
@@ -51,6 +53,13 @@ public class TemplateSerivceImpl implements TemplateService {
 	@Override
 	public List<Template> loadList() {
 		return templateRepository.findAll();
+	}
+	
+	@Override
+	public List<Template> loadList(long utNo) {
+		UseType ut = useTypeRepository.findById(utNo).orElseThrow(()->new IllegalStateException("존재하지 않는 용도타입 입니다"));
+		
+		return templateRepository.findByUtNo(ut).orElse(new ArrayList<Template>());
 	}
 
 	@Override
