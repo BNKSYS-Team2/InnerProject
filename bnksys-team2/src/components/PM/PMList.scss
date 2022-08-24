@@ -11,8 +11,9 @@
     .pmImg {
       background-color: bisque;
       width: 100%;
-      height: 250px;
-      margin-bottom: 10px;
+      height: auto;
+      max-width: 300px;
+
       &:hover {
         transform: scale(1.05);
       }

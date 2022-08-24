@@ -14,34 +14,32 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // 'user/login' 엔드포인트로 post요청함.
-    const res = await Api.post('api/user/login', {
-      id,
-      password,
-    })
-      .then((res) => {
-        if (res.data.success == 'True') {
-          const user = res.data;
-          const userNo = user.userNo;
-          console.log(userNo);
-          sessionStorage.setItem('userNo', userNo);
-          navigate('/mypm');
-          document.location.href = '/mypm';
-          setId('');
-          setPassword('');
-        } else {
-          setId('');
-          setPassword('');
-          e.target.reset();
-          alert('로그인에 실패하였습니다.');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    const handleSubmit = async (e) => {
+      e.preventDefault(); 
+        // 'user/login' 엔드포인트로 post요청함.
+        const res = await Api.post('api/user/login', {
+          id,
+          password,
+        }).then(res => {
+          if(res.data.success=='True'){
+            const user = res.data;
+            const userNo = user.userNo;
+            sessionStorage.setItem('userNo', userNo);
+            // navigate('/mypm');
+            document.location.href = '/mypm';
+            setId('');
+            setPassword('');
+          }else{
+            setId('');
+            setPassword('');
+            e.target.reset();
+            alert('로그인에 실패하였습니다.');
+          }
+        }).catch ((err)=>{
+          console.log(err);
+        });
+  
+      };
 
   return (
     <div>
