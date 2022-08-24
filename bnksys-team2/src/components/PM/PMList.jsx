@@ -27,7 +27,7 @@ const PMList = () => {
               <div className = "col-4 pmBox" key = {index}>
                 <img
                   key = {index}
-                  src={`http://192.168.0.124:8080/api/pm/load/${userNo}/${image.pmNo}`} className="pmImg"
+                  src={`${Api.getServerUrl()}api/pm/load/${userNo}/${image.pmNo}`} className="pmImg"
                 ></img>
                 <p>{image.pmTitle}</p>
               </div>

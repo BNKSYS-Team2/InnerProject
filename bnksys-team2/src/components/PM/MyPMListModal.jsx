@@ -43,10 +43,10 @@ const MyPMListModal = (props) => {
                   <div
                     className="pmImg"
                     onClick={() =>
-                      selectPm(`http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`)
+                      selectPm(`${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`)
                     }>
                     <img
-                      src={`http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`}
+                      src={`${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`}
                       alt=""
                     />
                   </div>
