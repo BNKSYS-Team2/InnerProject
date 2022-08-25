@@ -6,25 +6,10 @@ import Login from './User/Login.jsx';
 import Distribute from './PM/DistributePM.jsx';
 import SelectTemplate from './PM/SelectTemplate.jsx';
 import CreatePM2 from './PM/CreatePM2.jsx';
+import ClientLogin from '../components/User/ClientLogin.jsx';
+import DigitalPicture from './PM/DigitalPicture.jsx';
 
 export const Routing = () => {
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    if (
-      sessionStorage.getItem('userNo') === null ||
-      sessionStorage.getItem('userNo') === 'undefined'
-    ) {
-      // sessionStorage 에 userNo 라는 key 값으로 저장된 값이 없다면
-      console.log('isLogin ?? :: ', isLogin);
-    } else {
-      // sessionStorage 에 userNo 라는 key 값으로 저장된 값이 있다면
-      // 로그인 상태 변경
-      setIsLogin(true);
-      console.log('isLogin ?? :: ', isLogin);
-    }
-  }, [isLogin]);
-
   return (
     <BrowserRouter>
       <Header />
@@ -33,13 +18,11 @@ export const Routing = () => {
         <Route path="mypm" element={<MyPM />} />
         <Route path="distribute" element={<Distribute />} />
         <Route path="select" element={<SelectTemplate />} />
-        <Route path="create" element={<CreatePM2 />} />        
-        {isLogin ? (
-          // Main 컴포넌트 호출 시 isLogin 이라는 props 값을 전달
-          <Route path="mypm" element={<MyPM />} />
-        ) : (
-          <Route path="/" element={<Login />} />
-        )}
+        <Route path="create" element={<CreatePM2 />} />
+        <Route path="clientlogin" element={<ClientLogin />} />
+        <Route path="digitalpicture" element={<DigitalPicture />} />
+        <Route path="mypm" element={<MyPM />} />
+        <Route path="/" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

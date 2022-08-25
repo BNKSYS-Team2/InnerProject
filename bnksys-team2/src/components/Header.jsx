@@ -8,6 +8,7 @@ import * as Api from '../api';
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const [clientLogin, setClientLogin] = useState(false);
 
   useEffect(() => {
     if (
@@ -21,11 +22,30 @@ const Header = () => {
       // 로그인 상태 변경
       setIsLogin(true);
     }
+
+    if (
+      sessionStorage.getItem('clientNo') === null ||
+      sessionStorage.getItem('clientNo') === 'undefined'
+    ) {
+      // sessionStorage 에 clientNo 라는 key 값으로 저장된 값이 없다면
+      setClientLogin(false);
+    } else {
+      // sessionStorage 에 clientNo 라는 key 값으로 저장된 값이 있다면
+      // 로그인 상태 변경
+      setClientLogin(true);
+    }
   });
 
   const onLogout = () => {
     // sessionStorage 에 user_id 로 저장되어있는 아이템을 삭제한다.
     sessionStorage.removeItem('userNo');
+    // App 으로 이동(새로고침)
+    document.location.href = '/';
+  };
+
+  const onLogoutClient = () => {
+    // sessionStorage 에 user_id 로 저장되어있는 아이템을 삭제한다.
+    sessionStorage.removeItem('clientNo');
     // App 으로 이동(새로고침)
     document.location.href = '/';
   };
@@ -74,6 +94,16 @@ const Header = () => {
                 회원 탈퇴
               </Nav.Link>
             </>
+          ) : clientLogin ? (
+            <Nav className="me-auto">
+              {/* <Link to="/digitalpicture" className="nav-link clientLink" style={{ color: 'white' }}>
+                디지털 액자
+              </Link> */}
+              <Nav.Link className="clientLogout" href="/" onClick={onLogoutClient}>
+                로그아웃
+              </Nav.Link>
+              {/* <Nav.Link href="#">회원 탈퇴</Nav.Link> */}
+            </Nav>
           ) : null}
         </Navbar.Collapse>
       </Container>
