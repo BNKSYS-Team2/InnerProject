@@ -41,11 +41,12 @@ function CreatePM2(props) {
     const saveSvg = async() => {
         const svgstringval = svgEditor.svgCanvas.svgCanvasToString();
         console.log('utNo', utNo);
+        const title = prompt("제목을 입력 해주세요", "untitle");
         if (pmNo == null) {
             const res1 = await Api.post('api/pm/saveString', {
                 svgString: svgstringval,
                 userNo: sessionStorage.getItem('userNo'),
-                title: 'untitle',
+                title: title,
                 utNo: utNo
             });
             if (res1.data.success == 'True') {
@@ -57,7 +58,7 @@ function CreatePM2(props) {
             const res2 = await Api.post('api/pm/updateString', {
                 svgString: svgstringval,
                 userNo: sessionStorage.getItem('userNo'),
-                title: 'untitle',
+                title: title,
                 utNo: utNo,
                 pmNo: pmNo,
                 fileExtension:'svg'
@@ -142,6 +143,7 @@ function CreatePM2(props) {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            document.body.removeChild(pngImage);
         });
        
     }
@@ -173,6 +175,7 @@ function CreatePM2(props) {
             // document.body.removeChild(imgPreview);
         };
         svgImage.src = svgUrl;
+        document.body.removeChild(svgImage);
     }
     
     
