@@ -14,7 +14,6 @@ const MyPMListModal = (props) => {
     Api.get(`api/pm/list/${userNo}/${utNo}`)
       .then((res) => {
         let pmArr = res.data.pmList;
-        console.log(pmArr);
         setPmList(pmArr);
       })
       .catch((err) => {
@@ -22,9 +21,11 @@ const MyPMListModal = (props) => {
       });
   };
 
-  const selectPm = (imgUrl) => {
+  const selectPm = (imgUrl, pmNo) => {
+    props.selPmNo.push(pmNo)
     props.setSelImg(imgUrl);
     props.setSelClick(false);
+    props.setSelPmNo(props.selPmNo);
   };
 
   useEffect(() => {
@@ -43,10 +44,10 @@ const MyPMListModal = (props) => {
                   <div
                     className="pmImg"
                     onClick={() =>
-                      selectPm(`${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`)
+                      selectPm(`http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`, String(pm.pmNo))
                     }>
                     <img
-                      src={`${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`}
+                      src={`http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`}
                       alt=""
                     />
                   </div>
