@@ -29,32 +29,32 @@ const DistributeList = () => {
             <th>저작물 제목</th>
             <th>배포지점</th>
             <th>배포일시</th>
-            <th>취소여부</th>
+            <th>배보상태</th>
             <th>배포취소</th>
           </tr>
         </thead>
         
           {distributeList.map((distribute, index) => {
               return(
-                  <tbody key = {index}>
-                    <tr>
-                      <td>
-                        {distribute.promotionMaterials.map((pm, pmIndex) => {
-                          return (<p key={ pmIndex}>{pm.pmTitle}</p>);
-                        })}
-                      </td>
-                      <td>
-                        {distribute.clients.map((client,clientIndex) => {
-                          return(<p key={ clientIndex}>{client.company}-{client.location}-{client.utNo.utName}</p>)
-                        }) }
-                      </td>
-                      <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
-                      <td>취소 가능</td>
-                      <td>
-                        <button className="cancelBtn1">취소</button>
-                      </td>
-                    </tr>
-                  </tbody>
+                <tbody key = {index}>
+                  <tr>
+                    <td>
+                      {distribute.promotionMaterials.map((pm, pmIndex) => {
+                        return (<p key={ pmIndex}>{pm.pmTitle}</p>);
+                      })}
+                    </td>
+                    <td>
+                      {distribute.clients.map((client,clientIndex) => {
+                        return(<p key={ clientIndex}>{client.company}-{client.location}-{client.utNo.utName}</p>)
+                      }) }
+                    </td>
+                    <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
+                    <td>{distribute.scheduleState}</td>
+                    <td>
+                      <button className="cancelBtn1">취소</button>
+                    </td>
+                  </tr>
+                </tbody>
               );
             })}
 
