@@ -18,6 +18,10 @@
     position:absolute;	
     right: 2px;
   }
+  #svgSaveBnt2{
+    position:absolute;	
+    right: 102px;
+  }
   .svg_editor * {
     transform-origin: 0 0;
   }

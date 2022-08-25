@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Editor from './svgedit/Editor.js';
 // import Editor from 'svgedit';
+import { Canvg } from 'canvg';
 
 import './CreatePM2.css';
 import { useState } from 'react';
@@ -70,8 +71,6 @@ function CreatePM2(props) {
         
     }
 
-    
-    
     useEffect(() => {
         //쿼리스트링 확인
         const params = new URLSearchParams(location.search);
@@ -126,11 +125,61 @@ function CreatePM2(props) {
     function scrollshow(){
         document.body.style.overflow='auto';
     }
+
+
+
+
+    const saveSvgToPng = async() => {
+        const svgstringval = svgEditor.svgCanvas.svgCanvasToString();
+        svgToPng(svgstringval,(imgData)=>{
+            const pngImage = document.createElement('img');
+            document.body.appendChild(pngImage);
+            pngImage.src = imgData;
+            
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'untitle';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+       
+    }
+    
+    // 이미지 변환
+    function svgToPng(svg, callback) {
+        const url = getSvgUrl(svg);
+        svgUrlToPng(url, (imgData) => {
+            callback(imgData);
+            URL.revokeObjectURL(url);
+        });
+    }
+    function getSvgUrl(svg) {
+        return  URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    }
+    function svgUrlToPng(svgUrl, callback) {
+        const svgImage = document.createElement('img');
+        // imgPreview.style.position = 'absolute';
+        // imgPreview.style.top = '-9999px';
+        document.body.appendChild(svgImage);
+        svgImage.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = svgImage.clientWidth;
+            canvas.height = svgImage.clientHeight;
+            const canvasCtx = canvas.getContext('2d');
+            canvasCtx.drawImage(svgImage, 0, 0);
+            const imgData = canvas.toDataURL('image/png');
+            callback(imgData);
+            // document.body.removeChild(imgPreview);
+        };
+        svgImage.src = svgUrl;
+    }
+    
     
     return(
         <div>
-            <button id = 'svgSaveBnt' onClick={saveSvg}>저장하기</button>
-            
+            <button id = 'svgSaveBnt' onClick={saveSvg}>서버저장하기</button>
+            <button id = 'svgSaveBnt2' onClick={saveSvgToPng}>PNG저장하기</button>
             <div id="svgeditcontainer" style={{ height: 'calc(100vh - 70px)'}} ></div>
         </div>
     );
