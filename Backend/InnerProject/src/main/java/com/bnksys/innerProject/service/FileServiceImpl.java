@@ -81,8 +81,12 @@ public class FileServiceImpl implements FileService {
 		
 		try {
 			//파일생성
-			file.createNewFile();
-			writer = new BufferedWriter(new FileWriter(file, true));
+			boolean isFile = file.createNewFile();
+			//파일이 이미 있으면 파일 초기화
+			if(isFile == true) {
+				
+			}
+			writer = new BufferedWriter(new FileWriter(file, false));
 			writer.write(str);
 	        writer.flush();
 	        writer.close();

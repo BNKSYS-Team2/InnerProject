@@ -2,6 +2,7 @@ package com.bnksys.innerProject.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,6 +144,53 @@ public class PromotionMaterialController {
 		return ret;
 	}
 	
+	@PostMapping("/updateString")
+	public Map<String, Object> updateString(@RequestBody Map<String, Object> req) {
+		Map<String, Object> ret = new HashMap<>();
+
+		PromotionMaterial pm = new PromotionMaterial();
+		pm.setPmTitle((String)req.get("title"));
+		pm.setUserNo(Long.parseLong((String)req.get("userNo")));
+		pm.setUtNo(new UseType(Long.parseLong((String)req.get("utNo"))));
+		pm.setFileExtension((String)req.get("fileExtension"));
+		pm.setPmNo((Long.parseLong((String)req.get("pmNo"))));
+		
+		String svgStr = (String)req.get("svgString");
+		Long pmNo = null;
+
+		
+		
+		// 데이터베이스에 저장
+		try {
+			pmNo = pmService.save(pm);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		
+		
+		// 파일 저장
+		try {
+			fileService.saveFileByString(svgStr, pmNo,pm.getFileExtension());
+		} catch (IllegalStateException e) {
+			try {
+				pmService.delete(pm);
+			} catch (IllegalStateException e2) {
+				ret.put("success", "False");
+				ret.put("msg", e2.getMessage());
+				return ret;
+			}
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		ret.put("success", "True");
+		ret.put("msg", "저장 성공");
+
+		return ret;
+	}
+	
 	@GetMapping("/load/{userNo}/{pmNo}")
 	public  ResponseEntity<?> load(
 			@PathVariable(name = "userNo") Long userNo,
@@ -243,6 +291,57 @@ public class PromotionMaterialController {
 				.body(resource);
 	}
 
+	@GetMapping("/loadString/{pmNo}")
+	public  ResponseEntity<?> loadString(
+			@PathVariable(name = "pmNo") Long pmNo,
+			HttpServletRequest request
+			) {
+		Map<String, Object> ret = new HashMap<>();
+		Resource resource = null;
+		List<String> list = null;
+		
+		PromotionMaterial pm = new PromotionMaterial();
+		pm.setPmNo(pmNo);
+		String fileName = null;
+		
+		try {
+			pm = pmService.load(pm);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+		
+		fileName = pm.getPmNo() + "." +pm.getFileExtension();			
+		
+		try {
+			resource = fileService.loadFile(fileName);
+		} catch (FileNotFoundException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		}
+
+
+		try {
+			log.info("pmfile String");
+			list=Files.readAllLines(resource.getFile().toPath());
+		} catch (Exception e) {
+			ret.put("success", "False");
+			ret.put("msg", "파일로드 실패");
+		}
+		
+		StringBuilder sb = new StringBuilder();
+        for (String item : list) {
+            sb.append(item);
+            sb.append(" ");
+        }
+        
+		ret.put("fileString",sb.toString());
+		ret.put("success", "True");
+	
+		return new ResponseEntity<>(ret, HttpStatus.OK);
+	}
 	
 	
 	@GetMapping("/list/{userNo}")
