@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Editor from './svgedit/Editor.js';
 // import Editor from 'svgedit';
-import { Canvg } from 'canvg';
 
 import './CreatePM2.css';
 import { useState } from 'react';
