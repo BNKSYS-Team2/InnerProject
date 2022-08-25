@@ -16,6 +16,9 @@ const PMList = () => {
     setImageList(res.data.pmList);
   };
 
+  const clickTemplate = (pmNo,utNo) => {
+      window.location.href = '/create?w='+utNo.width+'&h='+utNo.height+'&utNo='+utNo.utNo+'&pmNo='+pmNo;
+  }
   return (
     <>
     <div className = "container pm">
@@ -24,7 +27,7 @@ const PMList = () => {
           {/* 이미지 카드 */}
           {imageList.map((image, index) => {
             return (
-              <div className = "col-4 pmBox" key = {index}>
+              <div className = "col-4 pmBox" key = {index} onClick={() => { clickTemplate(image.pmNo,image.utNo) }}>
                 <img
                   key = {index}
                   src={`${Api.getServerUrl()}api/pm/load/${userNo}/${image.pmNo}`} className="pmImg"

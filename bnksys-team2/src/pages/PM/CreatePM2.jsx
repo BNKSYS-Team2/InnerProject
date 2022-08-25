@@ -8,6 +8,7 @@ import * as Api from '../../api';
 
 function CreatePM2(props) {
     const [utNo, setUtNo] = useState(null);
+    const [pmNo, setPmNo] = useState(null);
 
     const config = {
         allowInitialUserOverride: false,
@@ -27,23 +28,46 @@ function CreatePM2(props) {
         // console.log('fileString', res.data.fileString);
         svgstr=res.data.fileString
         return res.data.fileString;
+    };
+    
+    const getPromotionMaterialData = async (pmNo) => {
+        const res = await Api.get(`api/pm/loadString/${pmNo}`);
+        // console.log('fileString', res.data.fileString);
+        svgstr=res.data.fileString
+        return res.data.fileString;
       };
     
     const saveSvg = async() => {
         const svgstringval = svgEditor.svgCanvas.svgCanvasToString();
         console.log('utNo', utNo);
-        const res = await Api.post('api/pm/saveString', {
-            svgString: svgstringval,
-            userNo: sessionStorage.getItem('userNo'),
-            title: 'untitle.svg',
-            utNo: utNo
-        });
-
-        if (res.data.success == 'True') {
-            location.href = '/mymp';
-        } else {
-            console.log('파일 저장 실패');
+        if (pmNo == null) {
+            const res1 = await Api.post('api/pm/saveString', {
+                svgString: svgstringval,
+                userNo: sessionStorage.getItem('userNo'),
+                title: 'untitle',
+                utNo: utNo
+            });
+            if (res1.data.success == 'True') {
+                location.href = '/mypm';
+            } else {
+                console.log('파일 저장 실패');
+            }
+        } else {//저작물 불러온 경우엔 동일 pmNo로 저장 시켜야 함
+            const res2 = await Api.post('api/pm/updateString', {
+                svgString: svgstringval,
+                userNo: sessionStorage.getItem('userNo'),
+                title: 'untitle',
+                utNo: utNo,
+                pmNo: pmNo,
+                fileExtension:'svg'
+            });
+            if (res2.data.success == 'True') {
+                location.href = '/mypm';
+            } else {
+                console.log('파일 저장 실패');
+            }
         }
+        
     }
 
     
@@ -51,15 +75,21 @@ function CreatePM2(props) {
     useEffect(() => {
         //쿼리스트링 확인
         const params = new URLSearchParams(location.search);
+        setUtNo(params.get('utNo'));
+        setPmNo(params.get('pmNo'));
+        
         const pwidth = params.get('w');
         const pheight = params.get('h');
-        setUtNo(params.get('utNo'));
         const temNo = params.get('temNo');
+        
 
         console.log(pwidth);
         console.log(pheight);
         console.log(utNo);
         console.log(temNo);
+        console.log(pmNo);
+        console.log(params.get('pmNo'));
+        
         
 
         //너비 높이 설정 추가
@@ -77,10 +107,26 @@ function CreatePM2(props) {
             getTemplateData(temNo).then((svgString) => {
                 svgEditor.loadSvgString(svgString);
             });
+        } else if (params.get('pmNo') != null) {//저작물 불러오기
+            getPromotionMaterialData(params.get('pmNo')).then((svgString) => {
+                svgEditor.loadSvgString(svgString);
+            });
         }
 
+        scrollhidden();
+
+        return () => {
+            scrollshow();
+        }
     }, []);
-        
+
+    function scrollhidden(){
+        document.body.style.overflow='hidden';
+    }
+    function scrollshow(){
+        document.body.style.overflow='auto';
+    }
+    
     return(
         <div>
             <button id = 'svgSaveBnt' onClick={saveSvg}>저장하기</button>
