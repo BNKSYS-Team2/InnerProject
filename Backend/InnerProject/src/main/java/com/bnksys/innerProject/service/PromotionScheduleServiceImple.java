@@ -176,7 +176,7 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 		List<PromotionSchedule> list = null;
 		List<PromotionScheduleDto> ret = new ArrayList<PromotionScheduleDto>();
 		
-		list = psRepository.findByUserNo(userNo).get();
+		list = psRepository.findByUserNoOrderByStartDtDesc(userNo).get();
 
 		// PromotionSchedule -> PromotionScheduleDto 형변환
 		ret = list.stream().map((p)->new PromotionScheduleDto(
@@ -185,7 +185,8 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 				p.getStartDt().format(DateTimeFormatter.ofPattern("yyyMMddHH")),
 				p.getEndDt().format(DateTimeFormatter.ofPattern("yyyMMddHH")),
 				p.getClients().stream().map((p2)-> p2.getClientNo()).collect(Collectors.toList()),
-				p.getPromotionMaterials().stream().map((p3)-> new PromotionMaterialDto(p3.getPmNo().getPmNo(),p3.getPmNo().getPmTitle(),p3.getPmNo().getUtNo())).collect(Collectors.toList())			
+				p.getPromotionMaterials().stream().map((p3)-> new PromotionMaterialDto(p3.getPmNo().getPmNo(),p3.getPmNo().getPmTitle(),p3.getPmNo().getUtNo())).collect(Collectors.toList()),
+				getScheduleState(p)
 				)).collect(Collectors.toList());
 		
 		return ret;
@@ -199,6 +200,15 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 
-
+	public String getScheduleState(PromotionSchedule ps) {	
+		LocalDateTime now = LocalDateTime.now();
+		if(now.isBefore(ps.getStartDt())) { // 스케줄보다 지금이 작을떄
+			return "배포예정";
+		}else if(now.isAfter(ps.getEndDt())) {
+			return "배포종료";
+		}else {
+			return "배포중";
+		}
+	}
 
 }

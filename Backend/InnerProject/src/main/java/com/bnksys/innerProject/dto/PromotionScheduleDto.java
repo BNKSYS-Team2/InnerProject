@@ -29,8 +29,10 @@ public class PromotionScheduleDto {
 	private String endDt;
 	
 	//클라이언트 리스트
-	List<ClientInfo> clients;
+	private List<ClientInfo> clients;
 	
 	//저작물 리스트
-	List<PromotionMaterialDto> promotionMaterials;
+	private List<PromotionMaterialDto> promotionMaterials;
+	
+	private String scheduleState;
 }

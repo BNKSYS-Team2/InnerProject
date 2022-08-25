@@ -13,7 +13,7 @@ import com.bnksys.innerProject.domain.PromotionSchedule;
 
 public interface PromotionScheduleRepository extends JpaRepository<PromotionSchedule, Long>{
 	//내 배포목록 가져오기
-	Optional<List<PromotionSchedule>> findByUserNo(long userNo);
+	Optional<List<PromotionSchedule>> findByUserNoOrderByStartDtDesc(long userNo);
 	
 	
 	//해당 지점에 시작시간 ~ 끝시간동안 몇개가 배포 예약 되어있는지 갯수 리턴
