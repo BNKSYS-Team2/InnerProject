@@ -292,7 +292,7 @@ const handleSubmit = async (e) => {
         </div>
       {/* 예약 날짜 선택 */}
       <div className="row">
-        {distUnit ? distUnit.map((unit)=><div key={unit.id}>
+        {distUnit.length !=0 ? (<>
           <div className="label">예약 날짜 선택</div>
           <br></br>
             <div>
@@ -361,7 +361,7 @@ const handleSubmit = async (e) => {
                     >적용</Button>
                   <Button>리셋</Button>
               </div>
-              </Form.Group></div>) : null}
+              </Form.Group></>) : null}
               </div>
           </Form>
         </div>
