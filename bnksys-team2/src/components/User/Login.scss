@@ -1,0 +1,21 @@
+.userLogin {
+  h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #555;
+  }
+  .userInput {
+    width: 350px;
+  }
+  .loginMove {
+    font-size: 14px;
+    margin-top: -15px;
+    margin-bottom: 6px;
+    padding-left: 220px;
+    color: #777;
+    cursor: pointer;
+    &:hover {
+      color: #444;
+    }
+  }
+}

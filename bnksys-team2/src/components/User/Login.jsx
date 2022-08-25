@@ -3,6 +3,7 @@ import { Container, Col, Row, Form, Button, Modal, NavLink } from 'react-bootstr
 import { useNavigate } from 'react-router-dom';
 
 import * as Api from '../../api';
+import './Login.scss';
 
 const Login = () => {
   const [id, setId] = useState('');
@@ -14,46 +15,47 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-      e.preventDefault(); 
-        // 'user/login' 엔드포인트로 post요청함.
-        const res = await Api.post('api/user/login', {
-          id,
-          password,
-        }).then(res => {
-          if(res.data.success=='True'){
-            const user = res.data;
-            const userNo = user.userNo;
-            sessionStorage.setItem('userNo', userNo);
-            // navigate('/mypm');
-            document.location.href = '/mypm';
-            setId('');
-            setPassword('');
-          }else{
-            setId('');
-            setPassword('');
-            e.target.reset();
-            alert('로그인에 실패하였습니다.');
-          }
-        }).catch ((err)=>{
-          console.log(err);
-        });
-  
-      };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // 'user/login' 엔드포인트로 post요청함.
+    const res = await Api.post('api/user/login', {
+      id,
+      password,
+    })
+      .then((res) => {
+        if (res.data.success == 'True') {
+          const user = res.data;
+          const userNo = user.userNo;
+          sessionStorage.setItem('userNo', userNo);
+          // navigate('/mypm');
+          document.location.href = '/mypm';
+          setId('');
+          setPassword('');
+        } else {
+          setId('');
+          setPassword('');
+          e.target.reset();
+          alert('로그인에 실패하였습니다.');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
-    <div>
+    <div className="container userLogin">
       <br></br>
       <br></br>
       <br></br>
-      <br></br>
-      <h2>Login</h2>
+      <h1>USER LOGIN</h1>
       <Row className="justify-content-md-center mt-5">
         <Col lg={8}>
           <Form onSubmit={handleSubmit}>
-            <Form.Group>
-              <Form.Label>아이디</Form.Label>
+            <Form.Label>아이디</Form.Label>
+            <Form.Group className="d-flex justify-content-center">
               <Form.Control
+                className="userInput"
                 type="id"
                 autoComplete="on"
                 value={id}
@@ -67,9 +69,10 @@ const Login = () => {
               )}
             </Form.Group>
             <br></br>
-            <Form.Group>
-              <Form.Label>비밀번호</Form.Label>
+            <Form.Label>비밀번호</Form.Label>
+            <Form.Group className="d-flex justify-content-center">
               <Form.Control
+                className="userInput"
                 type="password"
                 autoComplete="on"
                 value={password}
@@ -83,7 +86,10 @@ const Login = () => {
               )}
             </Form.Group>
             <br></br>
-            <Form.Group className="mt-3 text-center">
+            <div className="loginMove" onClick={() => navigate('/clientlogin')}>
+              클라이언트로 로그인
+            </div>
+            <Form.Group className="text-center">
               <Button
                 variant="primary"
                 type="submit"
