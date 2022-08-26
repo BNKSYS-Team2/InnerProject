@@ -29,7 +29,7 @@ const DistributeList = () => {
             <th>저작물 제목</th>
             <th>배포지점</th>
             <th>배포일시</th>
-            <th>배보상태</th>
+            <th>배포상태</th>
             <th>배포취소</th>
           </tr>
         </thead>
