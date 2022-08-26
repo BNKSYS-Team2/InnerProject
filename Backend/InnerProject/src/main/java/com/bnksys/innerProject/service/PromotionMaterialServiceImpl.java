@@ -62,8 +62,6 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 		pm = pmRepository.findById(pm.getPmNo()).orElseThrow(()->new IllegalStateException("존재하지 않는 저작물 입니다"));
 
 		List<MaterialSchedule> list = msRepository.findByPmNo(pm).get();
-		log.info(list);
-		log.info(list.size());
 		
 		if(msRepository.findByPmNo(pm).get().size() != 0)
 			throw new IllegalStateException("배포스케줄이 존재하여 삭제 불가능 합니다");
