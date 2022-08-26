@@ -1,4 +1,5 @@
 .template {
+  font-family: MICEGothic;
   margin-bottom: 45px;
   h1 {
     margin-bottom: 30px;
@@ -8,12 +9,17 @@
   }
   .pmBox {
     margin-bottom: 50px;
+    p {
+      font-weight: bolder;
+    }
     .pmImg {
-      background-color: bisque;
+      border: 1px solid #aaa !important;
+      background-color: #fff;
       width: auto;
       height: auto;
       max-width: 300px;
       max-height: 300px;
+      margin-bottom: 10px;
       &:hover {
         transform: scale(1.05);
       }
