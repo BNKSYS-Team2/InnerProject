@@ -116,6 +116,13 @@ function CreatePM2(props) {
 
         return () => {
             scrollshow();
+            // const imgs = document.getElementsByClassName('saveSvgToPng');
+            // console.log(imgs);
+            // console.log(imgs[0]);
+
+            // imgs[0].parentNode.removeChild(imgs[0]);
+            // imgs[1].parentNode.removeChild(imgs[1]);
+            
         }
     }, []);
 
@@ -131,9 +138,10 @@ function CreatePM2(props) {
 
     const saveSvgToPng = async() => {
         const svgstringval = svgEditor.svgCanvas.svgCanvasToString();
+        console.log('adsf', svgstringval);
         svgToPng(svgstringval,(imgData)=>{
             const pngImage = document.createElement('img');
-            document.body.appendChild(pngImage);
+            document.getElementById('createPM').appendChild(pngImage);
             pngImage.src = imgData;
             
             const a = document.createElement('a');
@@ -142,9 +150,10 @@ function CreatePM2(props) {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            document.body.removeChild(pngImage);
+            // document.body.removeChild(pngImage);
+            pngImage.className = 'saveSvgToPng';
         });
-       
+        
     }
     
     // 이미지 변환
@@ -160,9 +169,7 @@ function CreatePM2(props) {
     }
     function svgUrlToPng(svgUrl, callback) {
         const svgImage = document.createElement('img');
-        // imgPreview.style.position = 'absolute';
-        // imgPreview.style.top = '-9999px';
-        document.body.appendChild(svgImage);
+        document.getElementById('createPM').appendChild(svgImage);
         svgImage.onload = function () {
             const canvas = document.createElement('canvas');
             canvas.width = svgImage.clientWidth;
@@ -171,15 +178,15 @@ function CreatePM2(props) {
             canvasCtx.drawImage(svgImage, 0, 0);
             const imgData = canvas.toDataURL('image/png');
             callback(imgData);
-            // document.body.removeChild(imgPreview);
         };
         svgImage.src = svgUrl;
-        document.body.removeChild(svgImage);
+        // document.body.removeChild(svgImage);
+        svgImage.className = 'saveSvgToPng';
     }
     
     
     return(
-        <div>
+        <div id = 'createPM'>
             <button id = 'svgSaveBnt' onClick={saveSvg}>서버저장하기</button>
             <button id = 'svgSaveBnt2' onClick={saveSvgToPng}>PNG저장하기</button>
             <div id="svgeditcontainer" style={{ height: 'calc(100vh - 70px)'}} ></div>
