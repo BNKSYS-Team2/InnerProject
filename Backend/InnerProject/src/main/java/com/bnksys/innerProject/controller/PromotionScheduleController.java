@@ -160,4 +160,29 @@ public class PromotionScheduleController {
 		
 		return ret;
 	}
+	
+	@GetMapping("/delete/{psNo}")
+	public  Map<String, Object> delete(			
+			@PathVariable(name = "psNo") long psNo,
+			HttpServletRequest request) {
+		Map<String, Object> ret = new HashMap<>();
+
+		List<PromotionScheduleDto> list = new ArrayList<>();
+		
+		try {
+			promotionScheduleService.delete(psNo);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}	
+	
+		
+		ret.put("success", "Ture");
+		ret.put("list", list);
+		ret.put("listCnt", list.size());
+		
+		
+		return ret;
+	}
 }

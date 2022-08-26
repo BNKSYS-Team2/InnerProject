@@ -22,8 +22,10 @@ import com.bnksys.innerProject.dto.PromotionMaterialDto;
 import com.bnksys.innerProject.dto.PromotionScheduleDto;
 import com.bnksys.innerProject.dto.TimeDto;
 import com.bnksys.innerProject.repository.ClientInfoRepository;
+import com.bnksys.innerProject.repository.MaterialScheduleRepository;
 import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.PromotionScheduleRepository;
+import com.bnksys.innerProject.repository.ScheduleClientRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,6 +39,8 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 	final private PromotionScheduleRepository psRepository;
 	final private ClientInfoRepository clientInfoRepository;
 	final private PromotionMaterialRepository pmRepository;
+	final private ScheduleClientRepository scRepository;
+	final private MaterialScheduleRepository msRepository;
 	
 	
 	@Override
@@ -191,6 +195,20 @@ public class PromotionScheduleServiceImple implements PromotionScheduleService {
 		
 		return ret;
 	}	
+	
+	@Override
+	public boolean delete(long psNo) {
+		
+		PromotionSchedule ps = psRepository.findById(psNo).orElseThrow(()->new IllegalStateException("스케줄이 존재하지 않습니다"));
+		
+		msRepository.deleteByPsNo(ps);
+		scRepository.deleteByPsNo(ps);
+		
+		psRepository.deleteById(psNo);
+		
+		
+		return true;
+	}
 	
 	public int getLastDateOfMonth(int year, int month) {	
 		

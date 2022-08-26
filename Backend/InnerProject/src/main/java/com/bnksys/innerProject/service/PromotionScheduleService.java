@@ -26,4 +26,6 @@ public interface PromotionScheduleService {
 	//자신의 스케줄 현황 조회
 	List<PromotionScheduleDto> getScheduleList(long userNo);
 	
+	//스케줄 삭제
+	boolean delete(long psNo);
 }

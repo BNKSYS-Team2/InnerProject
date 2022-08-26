@@ -27,4 +27,6 @@ public interface PromotionScheduleRepository extends JpaRepository<PromotionSche
 			"(ps.startDt < :endDt AND ps.endDt >= :endDt))")
 	Optional<Integer> getPromotinMaterialCountByClientNo(@Param("clientNo")ClientInfo clientNo, @Param("startDt")LocalDateTime startDt, @Param("endDt")LocalDateTime endDt);
 	
+	
+	
 }
