@@ -40,8 +40,8 @@ const PMList = () => {
                     key={index}
                     src={`${Api.getServerUrl()}api/pm/load/${userNo}/${image.pmNo}`}
                     className="pmImg"></img>
-                  <p>{image.pmTitle}</p>
                 </div>
+                <div className="title">{image.pmTitle}</div>
               </div>
             );
           })}

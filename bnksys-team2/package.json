@@ -20,6 +20,7 @@
     "react-slick": "^0.29.0",
     "sass": "^1.54.4",
     "slick-carousel": "^1.8.1",
+    "sweetalert": "^2.1.2",
     "warning": "^4.0.3",
     "web-vitals": "^2.1.0",
     "webpack": "^5.74.0"

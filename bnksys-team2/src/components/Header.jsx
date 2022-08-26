@@ -70,7 +70,7 @@ const Header = () => {
   return (
     <Navbar expand="lg">
       <Container>
-        <Navbar.Brand href="#home">LOGO</Navbar.Brand>
+        <Navbar.Brand className="logo">BnkOP</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           {isLogin ? (

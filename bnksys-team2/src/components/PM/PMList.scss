@@ -1,4 +1,5 @@
 .pm {
+  font-family: MICEGothic;
   margin-bottom: 45px;
 
   h1 {
@@ -10,22 +11,37 @@
     border-bottom: 1px solid #ccc;
   }
   .pmBox {
-    margin-bottom: 50px;
+    margin-bottom: 20px !important;
     // background-color: #eee;
     width: 30%;
     margin: 0 15px;
     padding: 0;
     display: table;
+    border-collapse: separate;
+    border-spacing: 0 5px;
     &:hover {
       transform: scale(1.05);
     }
     .box {
       display: table-cell;
       vertical-align: middle;
+      width: 100% !important;
+      height: 100%;
+      border: 1px solid #aaa !important;
+      .pmImg {
+        width: 100%;
+        background-color: #fff !important;
+        // margin-bottom: 10px;
+        img {
+          width: 100%;
+        }
+      }
     }
-  }
-
-  .pmImg {
-    width: 100%;
+    .title {
+      display: table-row;
+      font-size: 18px;
+      color: #555;
+      font-weight: bolder;
+    }
   }
 }
