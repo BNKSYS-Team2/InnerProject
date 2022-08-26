@@ -54,8 +54,13 @@ const DigitalPicture = () => {
     enterFullscreenBtn.addEventListener('click', (e) => {
       fullscreen(container);
     });
-
     getDistributePM();
+    let timer = setInterval(() => {
+      getDistributePM();
+    }, 60*1000);
+    
+    return () => clearInterval(timer)
+    
   }, []);
 
   // img preloading
