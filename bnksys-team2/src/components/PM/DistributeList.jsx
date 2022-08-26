@@ -20,6 +20,11 @@ const DistributeList = () => {
     setDistributeList(res.data.list);
   };
 
+  const deleteDistribute = async (psNo) => {
+    const res = await Api.get(`api/schedule/delete/${psNo}`);
+    getDistributeData();
+  };
+
   return (
     <div className="container distribute">
       <h1>배포 현황</h1>
@@ -51,7 +56,7 @@ const DistributeList = () => {
                     <td>{distribute.startDt.substring(0, 4)}-{distribute.startDt.substring(4,6)}-{distribute.startDt.substring(6, 8)}-{distribute.startDt.substring(8, 10)}:00 ~ {distribute.endDt.substring(0, 4)}-{distribute.endDt.substring(4,6)}-{distribute.endDt.substring(6, 8)}-{distribute.endDt.substring(8, 10)}:00</td>
                     <td>{distribute.scheduleState}</td>
                     <td>
-                      <button className="cancelBtn1">취소</button>
+                      <button className="cancelBtn1" onClick={() => { deleteDistribute(distribute.psNo) }}>취소</button>
                     </td>
                   </tr>
                 </tbody>
