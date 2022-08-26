@@ -179,8 +179,6 @@ public class PromotionScheduleController {
 	
 		
 		ret.put("success", "Ture");
-		ret.put("list", list);
-		ret.put("listCnt", list.size());
 		
 		
 		return ret;
