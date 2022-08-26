@@ -28,12 +28,21 @@
       width: 100% !important;
       height: 100%;
       border: 1px solid #aaa !important;
+      position: relative;
       // background-color: #eee;
       .pmImg {
         background-color: #fff !important;
         max-height: 192px !important;
         img {
           // height: 100%;
+        }
+      }
+      .deleteImg {
+        position: absolute;
+        bottom: -28px;
+        right: 3px;
+        &:hover {
+          color: #ef2835;
         }
       }
     }
