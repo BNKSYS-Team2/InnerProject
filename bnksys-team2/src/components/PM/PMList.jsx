@@ -25,6 +25,7 @@ const PMList = () => {
   };
 
   const deletePromotionMaterial = async (userNo, pmNo) => {
+    window.confirm('삭제하시겠습니까?');
     const res = await Api.post('api/pm/delete', {
       userNo,
       pmNo,

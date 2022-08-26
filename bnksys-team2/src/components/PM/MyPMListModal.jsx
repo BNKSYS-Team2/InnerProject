@@ -58,7 +58,7 @@ const MyPMListModal = (props) => {
             {pmList.map((pm) => (
               <div className="myPM" key={pm.pmNo}>
                 <div
-                  className="pmImg"
+                  className="pmImg d-flex-justify-content-center"
                   onClick={() =>
                     selectPm(
                       `http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`,
