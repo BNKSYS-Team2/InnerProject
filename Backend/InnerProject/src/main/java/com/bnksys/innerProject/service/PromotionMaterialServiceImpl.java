@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bnksys.innerProject.domain.ClientInfo;
+import com.bnksys.innerProject.domain.MaterialSchedule;
 import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.UseType;
 import com.bnksys.innerProject.dto.PromotionMaterialDto;
 import com.bnksys.innerProject.repository.ClientInfoRepository;
+import com.bnksys.innerProject.repository.MaterialScheduleRepository;
 import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.UseTypeRepository;
 import com.bnksys.innerProject.repository.UserRepository;
@@ -30,6 +32,7 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 	private final UserRepository userRepository;
 	private final UseTypeRepository useTypeRepository;
 	private final ClientInfoRepository clientInfoRepository;
+	private final MaterialScheduleRepository msRepository;
 	
 	
 	
@@ -56,10 +59,17 @@ public class PromotionMaterialServiceImpl implements PromotionMaterialService {
 
 	@Override
 	public boolean delete(PromotionMaterial pm) {
-		if(pmRepository.findById(pm.getPmNo()).isPresent() == false)
-			throw new IllegalStateException("존재하지 않는 저작물 입니다");
+		pm = pmRepository.findById(pm.getPmNo()).orElseThrow(()->new IllegalStateException("존재하지 않는 저작물 입니다"));
+
+		List<MaterialSchedule> list = msRepository.findByPmNo(pm).get();
+		log.info(list);
+		log.info(list.size());
+		
+		if(msRepository.findByPmNo(pm).get().size() != 0)
+			throw new IllegalStateException("배포스케줄이 존재하여 삭제 불가능 합니다");
 		
 		pmRepository.delete(pm);
+		
 		
 		return true;
 	}
