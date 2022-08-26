@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Col, Row, Form, Button, Modal, NavLink } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 import * as Api from '../../api';
 import './Login.scss';
@@ -27,7 +28,6 @@ const Login = () => {
           const user = res.data;
           const userNo = user.userNo;
           sessionStorage.setItem('userNo', userNo);
-          // navigate('/mypm');
           document.location.href = '/mypm';
           setId('');
           setPassword('');
@@ -35,7 +35,10 @@ const Login = () => {
           setId('');
           setPassword('');
           e.target.reset();
-          alert('로그인에 실패하였습니다.');
+          swal('로그인 실패', '  ', 'error', {
+            buttons: false,
+            timer: 1000,
+          });
         }
       })
       .catch((err) => {

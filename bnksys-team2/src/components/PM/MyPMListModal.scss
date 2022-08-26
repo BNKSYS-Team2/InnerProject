@@ -1,6 +1,15 @@
 .myPMListModal {
+  .slick-prev::before {
+    margin-right: -26px;
+    content: url(https://raw.githubusercontent.com/heeya15/HANZOOM/master/frontend/src/assets/icon_prev.png);
+  }
+  .slick-next::before {
+    margin-left: -26px;
+    content: url(https://raw.githubusercontent.com/heeya15/HANZOOM/master/frontend/src/assets/icon_next.png);
+  }
+  font-family: MICEGothic;
   width: 80%;
-  height: 520px;
+  // height: 520px;
   background-color: #fff;
   position: fixed;
   top: 100px;
@@ -37,5 +46,8 @@
         }
       }
     }
+  }
+  .buttons {
+    margin-bottom: 10px;
   }
 }

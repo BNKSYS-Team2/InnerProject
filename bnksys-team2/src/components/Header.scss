@@ -1,9 +1,16 @@
 .navbar {
+  font-family: MICEGothic;
   background-color: #ef2835;
   height: 70px;
   margin-bottom: 50px;
+
+  .logo {
+    color: #fff;
+    font-size: 28px;
+    font-weight: bolder;
+  }
   a {
-    // color: #fff;
+    color: #444;
     font-weight: bold;
     font-size: 18px;
     text-decoration: none;
