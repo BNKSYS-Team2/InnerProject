@@ -67,7 +67,7 @@ const DistributePM = () => {
     setSelBranch(e.target.value);
   };
 
-  const unitCheck = (e, unit) => {
+  const unitCheck = (e, unit, bank, branch) => {
     let checked = e.target.checked;
     let value = e.target.value;
     let id = unit.clientNo;
@@ -76,6 +76,9 @@ const DistributePM = () => {
       const unitInfo = {
         id: id,
         unitData: unit.utNo,
+        bank : bank,
+        branch: branch,
+        unit : unit.unit
       };
       setDistUnit(distUnit.concat(unitInfo));
     } else {
@@ -232,9 +235,24 @@ const DistributePM = () => {
     }
   };
 
+
+  const getDistinctUnitType = (distUnitList) => {
+    const unitType = distUnitList.map((d) => d.unitData);
+    console.log(unitType);
+    // return unitType.filter((e, i) => unitType.indexOf(e) === i);
+    const newArray = unitType.filter((item, i) => {
+      return (
+        unitType.findIndex((item2) => {
+          return item.utNo === item2.utNo;
+        }) === i
+      );
+    });
+    return newArray;
+  }
+
   return (
     <>
-      {console.log(distUnit)}
+      {console.log('distUnit',distUnit)}
       {/* <div className={selClick ? 'distributeWrap' : null}></div> */}
       {/* {selClick ? <PMListModal setSelClick={setSelClick} /> : null} */}
       <div className="distribute container">
@@ -260,25 +278,33 @@ const DistributePM = () => {
                 ))}
             </Form.Select>
           </div>
-          {/* 해상도 선택 */}
-          <div className="label">해상도 선택</div>
+          {/* 단말기 선택 */}
+          <div className="label">단말기 선택</div>
           <div className="d-flex justify-content-center">
             <div className="checkboxWrap d-flex justify-content-center">
               {unit
-                ? unit.map((unit) => (
+                ? unit.map((unit) => {
+                  
+                  console.log( console.log('aaaa',distUnit.filter((d) => d.id === unit.clientNo).length));
+                  return (                    
                     <div className="checkDevice" key={unit.clientNo}>
                       <input
                         type="checkbox"
                         id={`check${unit.clientNo}`}
-                        value={unit.utNo.utName}
+                        // value={unit.unit}
+                        defaultChecked={distUnit.filter((d) => d.id === unit.clientNo).length!=0?true:false}
+                          // if (distUnit.filter((d) => d.id === unit.clientNo).length != 0)
+                            // true;
+                        // }
                         onChange={(e) => {
-                          unitCheck(e, unit);
+                          unitCheck(e, unit, selBank, selBranch);
                         }}
                       />
-                      <label htmlFor={`check${unit.clientNo}`}></label>
-                      <span>{unit.utNo.utName}</span>
+                      <label htmlFor={`check${unit.clientNo}`} checked></label>
+                      <span>{unit.unit}</span>
                     </div>
-                  ))
+                  )
+                })
                 : null}
             </div>
           </div>
@@ -289,7 +315,7 @@ const DistributePM = () => {
               {distUnit
                 ? distUnit.map((unit) => (
                     <p key={unit.id}>
-                      {selBank}-{selBranch}-{unit.unitData.utName}
+                      {unit.bank}-{unit.branch}-{unit.unit}
                     </p>
                   ))
                 : null}
@@ -298,11 +324,12 @@ const DistributePM = () => {
           {/* 저작물 선택 */}
           <div className="selectPM d-flex justify-content-center">
             <div className="row">
+              { console.log('저작물 선택',getDistinctUnitType(distUnit))}
               {distUnit
-                ? distUnit.map((unit) => (
+                ? getDistinctUnitType(distUnit).map((unitType) => (
                     <SelectPMList
-                      key={unit.id}
-                      unit={unit}
+                      key={unitType.utNo}
+                      unitType={unitType}
                       setSelPmNo={setSelPmNo}
                       selPmNo={selPmNo}
                     />

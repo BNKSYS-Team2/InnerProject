@@ -10,7 +10,7 @@ import * as Api from '../../api';
 const MyPMListModal = (props) => {
   const [pmList, setPmList] = useState([]);
 
-  const { unit } = props;
+  const { unitType } = props;
   const userNo = sessionStorage.getItem('userNo');
 
   const imgUrl =
@@ -26,7 +26,7 @@ const MyPMListModal = (props) => {
   };
 
   const getUserPmList = () => {
-    let utNo = unit.unitData.utNo;
+    let utNo = unitType.utNo;
     Api.get(`api/pm/list/${userNo}/${utNo}`)
       .then((res) => {
         let pmArr = res.data.pmList;
@@ -50,7 +50,7 @@ const MyPMListModal = (props) => {
 
   return (
     <div className="myPMListModal">
-      {console.log(unit)}
+      {console.log(unitType)}
       <p className="explain">저작물을 선택해주세요.</p>
       <div className="myPMSel">
         {pmList ? (
@@ -61,11 +61,11 @@ const MyPMListModal = (props) => {
                   className="pmImg d-flex-justify-content-center"
                   onClick={() =>
                     selectPm(
-                      `http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`,
+                      `${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`,
                       String(pm.pmNo),
                     )
                   }>
-                  <img src={`http://192.168.0.124:8080/api/pm/load/${userNo}/${pm.pmNo}`} alt="" />
+                  <img src={`${Api.getServerUrl()}api/pm/load/${userNo}/${pm.pmNo}`} alt="" />
                 </div>
                 <p className="pmTitle">{pm.pmTitle}</p>
               </div>

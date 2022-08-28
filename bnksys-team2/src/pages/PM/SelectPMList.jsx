@@ -5,7 +5,7 @@ const SelectPMList = (props) => {
   const [selClick, setSelClick] = useState(false);
   const [selImg, setSelImg] = useState(null);
 
-  const { unit } = props;
+  const { unitType } = props;
   
 
   const imgUrl =
@@ -14,9 +14,9 @@ const SelectPMList = (props) => {
 
   console.log(props.selPmNo);
   return (
-    <div className="pmArea col" key={unit.id}>
+    <div className="pmArea col" key={unitType.utNo}>
       <div className={selClick ? 'distributeWrap' : null}></div>
-      <p className="device">{unit.unitData.utName}</p>
+      <p className="device">{unitType.utName}</p>
       <div className="pmImg d-flex justify-content-center">
         <img src={selImg ? selImg : imgUrl} alt="" />
       </div>
@@ -24,7 +24,7 @@ const SelectPMList = (props) => {
         저작물 선택
       </button>
       {selClick ? (
-        <PMListModal setSelClick={setSelClick} unit={unit} setSelImg={setSelImg} setSelPmNo={props.setSelPmNo} selPmNo={props.selPmNo} />
+        <PMListModal setSelClick={setSelClick} unitType={unitType} setSelImg={setSelImg} setSelPmNo={props.setSelPmNo} selPmNo={props.selPmNo} />
       ) : null}
     </div>
   );

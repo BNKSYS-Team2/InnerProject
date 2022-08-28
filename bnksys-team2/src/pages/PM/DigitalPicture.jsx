@@ -68,7 +68,7 @@ const DigitalPicture = () => {
   const [imgsLoaded, setImgsLoaded] = useState(false);
   useEffect(() => {
     if (pmNums) {
-      let baseUrl = 'http://192.168.0.124:8080/api/pm/load/';
+      let baseUrl = `${Api.getServerUrl()}api/pm/load/`;
       for (let i = 0; i < pmNums.length; i++) {
         let url = baseUrl + pmNums[i].pmNo;
         console.log(url);
