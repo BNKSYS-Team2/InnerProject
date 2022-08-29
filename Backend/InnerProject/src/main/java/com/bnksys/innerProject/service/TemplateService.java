@@ -1,6 +1,7 @@
 package com.bnksys.innerProject.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bnksys.innerProject.domain.Template;
 
@@ -8,6 +9,9 @@ public interface TemplateService {
 	
 	//템플릿 저장하기
 	long save(Template tmp);
+	
+	//저작물 번호로 템플릿 저장하기
+	Map<String, Long> saveByPmNo(long pmNo, String title);
 	
 	//템플릿 삭제하기
 	boolean delete(Template tmp);

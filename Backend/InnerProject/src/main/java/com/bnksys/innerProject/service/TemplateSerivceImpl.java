@@ -1,13 +1,17 @@
 package com.bnksys.innerProject.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bnksys.innerProject.domain.PromotionMaterial;
 import com.bnksys.innerProject.domain.Template;
 import com.bnksys.innerProject.domain.UseType;
+import com.bnksys.innerProject.repository.PromotionMaterialRepository;
 import com.bnksys.innerProject.repository.TemplateRepository;
 import com.bnksys.innerProject.repository.UseTypeRepository;
 
@@ -21,6 +25,7 @@ import lombok.extern.log4j.Log4j2;
 public class TemplateSerivceImpl implements TemplateService {
 	private final TemplateRepository templateRepository;
 	private final UseTypeRepository useTypeRepository;
+	private final PromotionMaterialRepository pmRepository;
 	
 	
 	@Override
@@ -32,6 +37,26 @@ public class TemplateSerivceImpl implements TemplateService {
 		templateRepository.save(tmp);
 		
 		return tmp.getTemNo();
+	}
+	
+	@Override
+	public Map<String, Long> saveByPmNo(long pmNo, String title) {
+		Map<String, Long> ret = new HashMap<String, Long>();
+		
+		PromotionMaterial pm = pmRepository.findById(pmNo).orElseThrow(()->new IllegalStateException("존재하지 않는 저작물입니다"));
+		
+		Template tmp = new Template();
+		
+		tmp.setTitle(title);
+		tmp.setUtNo(pm.getUtNo());
+	
+		templateRepository.save(tmp);
+		
+		ret.put("pmNo", pm.getPmNo());
+		ret.put("temNo", tmp.getTemNo());
+		
+		
+		return ret;
 	}
 
 	@Override

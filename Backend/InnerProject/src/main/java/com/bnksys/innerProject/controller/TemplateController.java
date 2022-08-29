@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,6 +85,52 @@ public class TemplateController {
 		try {
 			fileService.saveFile(tmpFile, tmpNo);
 		} catch (IllegalStateException e) {
+			try {
+				templateService.delete(tmp);
+			} catch (IllegalStateException e2) {
+				ret.put("success", "False");
+				ret.put("msg", e2.getMessage());
+				return ret;
+			}
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		ret.put("success", "True");
+		ret.put("msg", "저장 성공");
+
+		return ret;
+	}
+	
+	@PostMapping("/saveByPmNo")
+	public Map<String, Object> save(
+			@RequestBody Map<String, String> req
+			) {
+		Map<String, Object> ret = new HashMap<>();
+		Map<String, Long> m = new HashMap<>();
+		
+		long pmNo = Long.parseLong((String)req.get("pmNo"));
+		String title = (String)req.get("title");
+		
+		
+		
+		
+		// 데이터베이스에 저장
+		try {
+			m = templateService.saveByPmNo(pmNo, title);
+		} catch (IllegalStateException e) {
+			ret.put("success", "False");
+			ret.put("msg", e.getMessage());
+			return ret;
+		}
+		Long tmpNo = m.get("temNo");
+		Template tmp = new Template();
+		tmp.setTemNo(tmpNo);
+		
+		// 파일 저장
+		try {
+			fileService.saveTemplateFileByPmNo(m.get("pmNo"), tmpNo);
+		} catch (IllegalStateException | FileNotFoundException e) {
 			try {
 				templateService.delete(tmp);
 			} catch (IllegalStateException e2) {

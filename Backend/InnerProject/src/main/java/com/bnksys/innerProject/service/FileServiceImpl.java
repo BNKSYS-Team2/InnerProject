@@ -1,8 +1,10 @@
 package com.bnksys.innerProject.service;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -115,4 +117,45 @@ public class FileServiceImpl implements FileService {
 		}
 
 	}
+	
+	@Override
+	public boolean saveTemplateFileByPmNo(long pmNo,long temNo) throws FileNotFoundException {
+
+		File file1=null;
+		File file2=null;
+		
+		BufferedWriter writer = null;
+		BufferedReader reader = null;
+		
+		Path location1 = this.dirLocation.resolve(pmNo+".svg");
+		Path location2 = this.dirLocation.resolve(temNo+".svg");
+		
+		file1 = new File(location1.toUri());
+		file2 = new File(location2.toUri());
+		
+		
+		
+		try {
+			//파일생성
+			boolean isFile = file2.createNewFile();
+
+			reader = new BufferedReader(new FileReader(file1));
+			writer = new BufferedWriter(new FileWriter(file2, false));
+			
+			String str = null;
+			while ((str = reader.readLine()) != null) {
+				writer.write(str);
+			}
+			reader.close();
+	        writer.flush();
+	        writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+	
+	
+	
 }

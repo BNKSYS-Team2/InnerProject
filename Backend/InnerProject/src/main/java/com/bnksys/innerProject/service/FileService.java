@@ -12,4 +12,7 @@ public interface FileService {
 	public String saveFileByString(String str, long pl_fileName, String fileExtension);
 	//파일불러오기
 	public Resource loadFile(String fileName) throws FileNotFoundException;
+	
+	// PmNo로 템플릿 파일 저장
+	boolean saveTemplateFileByPmNo(long pmNo,long temNo) throws FileNotFoundException ;
 }
