@@ -4,6 +4,7 @@ import * as Api from '../../api';
 import swal from 'sweetalert';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 const PMList = () => {
   const [imageList, setImageList] = useState([]);
@@ -52,6 +53,35 @@ const PMList = () => {
       });
   };
 
+  const addTemplate = async (pmNo) => {
+    const title = window.prompt('템플릿 제목을 입력 해주세요','untitle');
+    const res = await Api.post('api/template/saveByPmNo', {
+      pmNo,
+      title,
+    })
+      .then((p) => {
+        if (p.data.success == 'True') {
+          swal('템플릿등록완료', '  ', 'success', {
+            buttons: false,
+            timer: 1200,
+          });
+          getImageData();
+        } else {
+          swal(p.data.msg, '  ', 'error', {
+            buttons: false,
+            timer: 1200,
+          });
+        }
+      })
+      .catch((error) => {
+        swal('저작물 등록 실패', '  ', 'success', {
+          buttons: false,
+          timer: 1200,
+        });
+      });
+  };
+
+  
   return (
     <>
       <div className="container pm">
@@ -71,8 +101,15 @@ const PMList = () => {
                     }}></img>
                   <DeleteIcon
                     className="deleteImg"
-                    onClick={() => deletePromotionMaterial(userNo, image.pmNo)}
+                    onClick={() => deletePromotionMaterial(userNo,image.pmNo)}
                   />
+                  <AddIcon
+                    className="addTemplate"
+                    onClick={() => addTemplate(image.pmNo)
+                    }
+                  />
+                  
+                  
                 </div>
                 <div className="title">{image.pmTitle}</div>
               </div>

@@ -45,6 +45,16 @@
           color: #ef2835;
         }
       }
+      .addTemplate {
+        position: absolute;
+        bottom: -28px;
+        right: 25px;
+        &:hover {
+          color: #ef2835;
+        }
+      }
+
+      
     }
     .title {
       display: table-row;
