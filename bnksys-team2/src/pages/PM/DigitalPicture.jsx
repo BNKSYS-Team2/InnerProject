@@ -105,9 +105,9 @@ const DigitalPicture = () => {
       <div className="d-flex justify-content-center mb-3">
         <div className="imgWrap">
           <Slider {...settings}>
-            {imgsLoaded ? (
+            {imgsLoaded ?( IMAGES.length != 0?(
               IMAGES.map((image, index) => <img key={index} src={image} alt="Human" />)
-            ) : (
+            ): (<img  src={`${Api.getServerUrl()}PromotionMaterial/empty.svg`} alt="Human" />)): (
               <h1>Loading images...</h1>
             )}
           </Slider>
